@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["android_bindings","bytes","cesu8","combine","jaffi_support","jni","jni_sys","log","memchr","thiserror"];
