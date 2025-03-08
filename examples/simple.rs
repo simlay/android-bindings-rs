@@ -161,7 +161,9 @@ fn dummy_render(native_window: &ndk::native_window::NativeWindow) {
 */
 
 /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
-fn ndk_context_jni_test(native_window: &ndk::native_window::NativeWindow) -> Result<(), Box<dyn std::error::Error>> {
+fn ndk_context_jni_test(
+    native_window: &ndk::native_window::NativeWindow,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Get a VM for executing JNI calls
     let ctx = ndk_context::android_context();
     let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }?;
