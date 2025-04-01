@@ -2,12 +2,35 @@ use android_activity::{
     input::{InputEvent, KeyAction, KeyEvent, KeyMapChar, MotionAction},
     AndroidApp, InputStatus, MainEvent, PollEvent,
 };
-use android_bindings::{AndroidContentContext, AndroidWidgetEditText, AndroidWidgetTextView};
-use jaffi_support::jni::{
-    objects::{JObject, JValue},
-    JavaVM,
+use android_bindings::{
+    AndroidContentContext,
+    AndroidWidgetEditText,
+    AndroidWidgetTextView,
+    //AndroidAppActivity,
+    AndroidViewViewGroupLayoutParams,
+    AndroidWidgetRelativeLayout,
+    JavaLangCharSequence,
+};
+use jaffi_support::{
+    jni::{
+        objects::{JObject, JValue, JString},
+        strings::{
+            JNIStr,
+            JNIString,
+            JavaStr,
+        },
+        JavaVM,
+        sys::{
+            jchar,
+            jbyte,
+        },
+    },
 };
 use log::info;
+use winit::raw_window_handle::{
+    HasRawWindowHandle,
+    RawWindowHandle,
+};
 
 #[no_mangle]
 fn android_main(app: AndroidApp) {
@@ -16,7 +39,6 @@ fn android_main(app: AndroidApp) {
     );
     info!("before hello world");
     println!("before hello world");
-    let winow = app.native_window();
     let mut quit = false;
     let mut redraw_pending = true;
     let mut native_window: Option<ndk::native_window::NativeWindow> = None;
@@ -86,14 +108,7 @@ fn android_main(app: AndroidApp) {
                                 if !iter.next(|event| {
                                     match event {
                                         InputEvent::KeyEvent(key_event) => {
-                                            /*
-                                            let combined_key_char = character_map_and_combine_key(
-                                                &app,
-                                                key_event,
-                                                &mut combining_accent,
-                                            );
-                                            info!("KeyEvent: combined key: {combined_key_char:?}")
-                                            */
+                                            info!("GOT A KEY EVENT:{:?}", key_event.key_code());
                                         }
                                         InputEvent::MotionEvent(motion_event) => {
                                             println!("action = {:?}", motion_event.action());
@@ -133,7 +148,7 @@ fn android_main(app: AndroidApp) {
                         }
 
                         info!("Render...");
-                        ndk_context_jni_test(native_window);
+                        let _ = ndk_context_jni_test(native_window);
                     }
                 }
             },
@@ -168,10 +183,57 @@ fn ndk_context_jni_test(
     let ctx = ndk_context::android_context();
     let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }?;
     let context = unsafe { JObject::from_raw(ctx.context().cast()) };
+
     let env = vm.attach_current_thread()?;
     let context = AndroidContentContext::from(context);
+    if let RawWindowHandle::AndroidNdk(ndk_handle) = native_window.raw_window_handle()? {
+        let foo = ndk_handle.a_native_window;
+    }
 
-    let text_editor =
+    //let text = env.new_string(format!("FOOBAR")).expect("Failed to build string");
+    let jchar_array = env.new_char_array(10).expect("Failed to build char array");
+    let _ = env.set_char_array_region(
+        jchar_array,
+        0,
+        &[
+            ('a' as jchar).try_into().unwrap(),
+            ('b' as jchar).try_into().unwrap(),
+            ('c' as jchar).try_into().unwrap(),
+        ]
+    );
+    let jchar_array = unsafe {
+        JObject::from_raw(
+            jchar_array
+        )
+    };
+    let layout = AndroidWidgetRelativeLayout::new_1android_widget_relative_layout_landroid_content_context_2(
+        *env, context
+    );
+    let view_group = layout.as_android_view_view_group();
+
+    let text_view =
+        AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
+            *env, context,
+        );
+    /*
+    text_view.as_android_view_view().set_layout_params(
+        AndroidViewViewGroupLayoutParams,
+    );
+    text_view.set_text_ljava_lang_char_sequence_2(
+        *env,
+        JavaLangCharSequence::from(jchar_array),
+    );
+    */
+    text_view.as_android_view_view().set_background_color(*env, 0xFF00FF);
+    view_group.add_view_landroid_view_view_2(
+        *env,
+        text_view.as_android_view_view()
+    );
+    /*
+    */
+
+
+    let text_editor_view =
         AndroidWidgetEditText::new_1android_widget_edit_text_landroid_content_context_2(
             *env, context,
         );
