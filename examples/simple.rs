@@ -3,34 +3,19 @@ use android_activity::{
     AndroidApp, InputStatus, MainEvent, PollEvent,
 };
 use android_bindings::{
-    AndroidContentContext,
-    AndroidWidgetEditText,
-    AndroidWidgetTextView,
-    //AndroidAppActivity,
-    AndroidViewViewGroupLayoutParams,
-    AndroidWidgetRelativeLayout,
-    JavaLangCharSequence,
+    AndroidAppActivity, AndroidContentContext, AndroidGraphicsColor,
+    AndroidViewViewGroupLayoutParams, AndroidViewWindow, AndroidWidgetEditText,
+    AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams, AndroidWidgetRelativeLayout,
+    AndroidWidgetTextView, JavaLangCharSequence,
 };
-use jaffi_support::{
-    jni::{
-        objects::{JObject, JValue, JString},
-        strings::{
-            JNIStr,
-            JNIString,
-            JavaStr,
-        },
-        JavaVM,
-        sys::{
-            jchar,
-            jbyte,
-        },
-    },
+use jaffi_support::jni::{
+    objects::{JObject, JString, JValue},
+    strings::{JNIStr, JNIString, JavaStr},
+    sys::{jbyte, jchar},
+    JavaVM,
 };
 use log::info;
-use winit::raw_window_handle::{
-    HasRawWindowHandle,
-    RawWindowHandle,
-};
+use winit::raw_window_handle::{HasRawWindowHandle, RawWindowHandle};
 
 #[no_mangle]
 fn android_main(app: AndroidApp) {
@@ -39,6 +24,7 @@ fn android_main(app: AndroidApp) {
     );
     info!("before hello world");
     println!("before hello world");
+    let _ = ndk_context_jni_test(app.clone());
     let mut quit = false;
     let mut redraw_pending = true;
     let mut native_window: Option<ndk::native_window::NativeWindow> = None;
@@ -148,7 +134,7 @@ fn android_main(app: AndroidApp) {
                         }
 
                         info!("Render...");
-                        let _ = ndk_context_jni_test(native_window);
+                        //let _ = ndk_context_jni_test(app.clone(), native_window);
                     }
                 }
             },
@@ -177,7 +163,8 @@ fn dummy_render(native_window: &ndk::native_window::NativeWindow) {
 
 /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
 fn ndk_context_jni_test(
-    native_window: &ndk::native_window::NativeWindow,
+    app: AndroidApp,
+    //native_window: &ndk::native_window::NativeWindow,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Get a VM for executing JNI calls
     let ctx = ndk_context::android_context();
@@ -186,9 +173,11 @@ fn ndk_context_jni_test(
 
     let env = vm.attach_current_thread()?;
     let context = AndroidContentContext::from(context);
+    /*
     if let RawWindowHandle::AndroidNdk(ndk_handle) = native_window.raw_window_handle()? {
         let foo = ndk_handle.a_native_window;
     }
+    */
 
     //let text = env.new_string(format!("FOOBAR")).expect("Failed to build string");
     let jchar_array = env.new_char_array(10).expect("Failed to build char array");
@@ -199,22 +188,16 @@ fn ndk_context_jni_test(
             ('a' as jchar).try_into().unwrap(),
             ('b' as jchar).try_into().unwrap(),
             ('c' as jchar).try_into().unwrap(),
-        ]
+        ],
     );
-    let jchar_array = unsafe {
-        JObject::from_raw(
-            jchar_array
-        )
-    };
-    let layout = AndroidWidgetRelativeLayout::new_1android_widget_relative_layout_landroid_content_context_2(
-        *env, context
-    );
-    let view_group = layout.as_android_view_view_group();
+    let jchar_array = unsafe { JObject::from_raw(jchar_array) };
 
-    let text_view =
-        AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
-            *env, context,
-        );
+    //let window = AndroidViewWindow::new_1android_view_window(*env, context);
+
+    let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
+        *env, context,
+    );
+
     /*
     text_view.as_android_view_view().set_layout_params(
         AndroidViewViewGroupLayoutParams,
@@ -224,14 +207,30 @@ fn ndk_context_jni_test(
         JavaLangCharSequence::from(jchar_array),
     );
     */
-    text_view.as_android_view_view().set_background_color(*env, 0xFF00FF);
-    view_group.add_view_landroid_view_view_2(
-        *env,
-        text_view.as_android_view_view()
-    );
-    /*
-    */
+    text_view
+        .as_android_view_view()
+        .set_background_color(*env, 0xFF00FF);
 
+    let layout =
+        AndroidWidgetLinearLayout::new_1android_widget_linear_layout_landroid_content_context_2(
+            *env, context,
+        );
+    layout.set_orientation(*env, 1);
+    layout
+        .as_android_view_view_group()
+        .as_android_view_view()
+        .set_background_color(*env, 0xFF00FF);
+
+    let view_group = layout.as_android_view_view_group();
+    let activity =
+        AndroidAppActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
+    let window = activity.get_window(*env);
+
+    view_group.add_view_landroid_view_view_2(*env, text_view.as_android_view_view());
+    window.set_content_view_landroid_view_view_2(
+        *env,
+        layout.as_android_view_view_group().as_android_view_view(),
+    );
 
     let text_editor_view =
         AndroidWidgetEditText::new_1android_widget_edit_text_landroid_content_context_2(

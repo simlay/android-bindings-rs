@@ -83,8 +83,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Works
         Cow::from("android.view.KeyEvent"),
         Cow::from("android.view.View"),
+        Cow::from("android.view.Window"),
         Cow::from("android.view.ViewGroup"),
         Cow::from("android.graphics.drawable.Drawable"),
+        Cow::from("android.graphics.Color"),
         Cow::from("android.widget.EditText"),
         Cow::from("android.widget.TextView"),
         Cow::from("android.widget.RelativeLayout"),
