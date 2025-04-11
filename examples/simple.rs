@@ -6,6 +6,8 @@ use android_bindings::{
     AndroidAppActivity, AndroidContentContext, AndroidGraphicsColor,
     AndroidViewViewGroupLayoutParams, AndroidViewWindow, AndroidWidgetEditText,
     AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams, AndroidWidgetRelativeLayout,
+    AndroidViewAutofillAutofillManager,
+
     AndroidWidgetTextView, JavaLangCharSequence,
 };
 use jaffi_support::jni::{
@@ -144,22 +146,6 @@ fn android_main(app: AndroidApp) {
     info!("after hello world");
     println!("after hello world");
 }
-/*
-fn dummy_render(native_window: &ndk::native_window::NativeWindow) {
-    unsafe {
-        let mut buf: ndk_sys::ANativeWindow_Buffer = std::mem::zeroed();
-        let mut rect: ndk_sys::ARect = std::mem::zeroed();
-        ndk_sys::ANativeWindow_lock(
-            native_window.ptr().as_ptr() as _,
-            &mut buf as _,
-            &mut rect as _,
-        );
-        // Note: we don't try and touch the buffer since that
-        // also requires us to handle various buffer formats
-        ndk_sys::ANativeWindow_unlockAndPost(native_window.ptr().as_ptr() as _);
-    }
-}
-*/
 
 /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
 fn ndk_context_jni_test(
@@ -169,10 +155,9 @@ fn ndk_context_jni_test(
     // Get a VM for executing JNI calls
     let ctx = ndk_context::android_context();
     let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }?;
-    let context = unsafe { JObject::from_raw(ctx.context().cast()) };
 
     let env = vm.attach_current_thread()?;
-    let context = AndroidContentContext::from(context);
+    let context = AndroidContentContext::from(unsafe { JObject::from_raw(ctx.context().cast()) });
     /*
     if let RawWindowHandle::AndroidNdk(ndk_handle) = native_window.raw_window_handle()? {
         let foo = ndk_handle.a_native_window;
@@ -180,6 +165,15 @@ fn ndk_context_jni_test(
     */
 
     //let text = env.new_string(format!("FOOBAR")).expect("Failed to build string");
+
+    let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
+        *env, context,
+    );
+    let string = env.new_string("foobar").expect("Failed to build string");
+
+
+
+
     let jchar_array = env.new_char_array(10).expect("Failed to build char array");
     let _ = env.set_char_array_region(
         jchar_array,
@@ -191,45 +185,44 @@ fn ndk_context_jni_test(
         ],
     );
     let jchar_array = unsafe { JObject::from_raw(jchar_array) };
-
-    //let window = AndroidViewWindow::new_1android_view_window(*env, context);
-
-    let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
-        *env, context,
-    );
+    let jchar_array = JavaLangCharSequence::from(jchar_array);
 
     /*
-    text_view.as_android_view_view().set_layout_params(
-        AndroidViewViewGroupLayoutParams,
-    );
     text_view.set_text_ljava_lang_char_sequence_2(
         *env,
-        JavaLangCharSequence::from(jchar_array),
+        jchar_array,
+    );
+    text_view.as_android_view_view().set_layout_params(
+        AndroidViewViewGroupLayoutParams,
     );
     */
     text_view
         .as_android_view_view()
-        .set_background_color(*env, 0xFF00FF);
+        .set_background_color(*env, 0x000000);
+
 
     let layout =
         AndroidWidgetLinearLayout::new_1android_widget_linear_layout_landroid_content_context_2(
             *env, context,
         );
     layout.set_orientation(*env, 1);
+    layout.as_android_view_view_group().as_android_view_view().set_padding(*env, 16, 16, 16, 16);
     layout
         .as_android_view_view_group()
-        .as_android_view_view()
-        .set_background_color(*env, 0xFF00FF);
-
-    let view_group = layout.as_android_view_view_group();
+        .add_view_landroid_view_view_2(*env, text_view.as_android_view_view());
     let activity =
         AndroidAppActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
     let window = activity.get_window(*env);
+    /*
+    layout
+        .as_android_view_view_group()
+        .add_view_landroid_view_view_2ii(*env, text_view.as_android_view_view(), 200, 200);
+    */
 
-    view_group.add_view_landroid_view_view_2(*env, text_view.as_android_view_view());
+    //view_group.add_view_landroid_view_view_2(*env, text_view.as_android_view_view());
     window.set_content_view_landroid_view_view_2(
         *env,
-        layout.as_android_view_view_group().as_android_view_view(),
+        layout.as_android_view_view_group().as_android_view_view()
     );
 
     let text_editor_view =

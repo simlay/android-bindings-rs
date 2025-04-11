@@ -70,7 +70,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let class_path = class_path();
     let classes = vec![
-        //Cow::from("android.annotation.AttrRes"),
+        ////Cow::from("android.annotation.AttrRes"),
+        //Cow::from("android.view.ViewGroup.LayoutParams"),
+        //Cow::from("java.lang.CharSequence"),
+        //Cow::from("java.lang.String"),
     ];
     let classes_to_wrap = vec![
         //Cow::from("android.annotation.AttrRes"),
@@ -92,6 +95,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.widget.RelativeLayout"),
         Cow::from("android.widget.LinearLayout"),
         Cow::from("android.widget.Button"),
+        Cow::from("android.view.autofill.AutofillId"),
+        Cow::from("android.view.autofill.AutofillManager"),
         //Cow::from("android.view.Surface"),
     ];
     let output_dir = PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR not set"));
