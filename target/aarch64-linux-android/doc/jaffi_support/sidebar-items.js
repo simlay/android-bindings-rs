@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["arrays","exceptions"],"struct":["JavaBoolean","JavaByte","JavaChar","JavaDouble","JavaFloat","JavaInt","JavaLong","JavaShort","JavaVoid"],"trait":["FromJavaToRust","FromJavaValue","FromRustToJava","IntoJavaValue","JavaPrimitive","NullObject"]};
