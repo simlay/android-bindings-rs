@@ -94,6 +94,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.widget.TextView"),
         Cow::from("android.widget.RelativeLayout"),
         Cow::from("android.widget.LinearLayout"),
+        //Cow::from("android.view.LayoutInflater"),
         Cow::from("android.widget.Button"),
         Cow::from("android.view.autofill.AutofillId"),
         Cow::from("android.view.autofill.AutofillManager"),

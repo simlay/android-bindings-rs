@@ -1,5 +1,4 @@
 name: Docs
-
 on:
   workflow_dispatch:
   push:
@@ -9,14 +8,13 @@ jobs:
   docs:
     runs-on: ubuntu-24.04
     permissions:
-      contents: write           # 'write' access to repository contents
+      contents: write # 'write' access to repository contents
     steps:
       - uses: actions/checkout@v4
       - name: Install Rust Nightly
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets:
-            aarch64-linux-android
+          targets: aarch64-linux-android
       - name: Cache
         uses: actions/cache@v4
         with:

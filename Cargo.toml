@@ -31,6 +31,10 @@ min_sdk_version = 21
 target_sdk_version = 34
 debuggable = true
 
+[package.metadata.android.application]
+debuggable = true
+theme = "@android:style/Theme.DeviceDefault"
+
 [patch.crates-io]
 jaffi = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }
 jaffi_support = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }

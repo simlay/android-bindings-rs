@@ -4,11 +4,9 @@ use android_activity::{
 };
 use android_bindings::{
     AndroidAppActivity, AndroidContentContext, AndroidGraphicsColor,
-    AndroidViewViewGroupLayoutParams, AndroidViewWindow, AndroidWidgetEditText,
-    AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams, AndroidWidgetRelativeLayout,
-    AndroidViewAutofillAutofillManager,
-
-    AndroidWidgetTextView, JavaLangCharSequence,
+    AndroidViewAutofillAutofillManager, AndroidViewViewGroupLayoutParams, AndroidViewWindow,
+    AndroidWidgetEditText, AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams,
+    AndroidWidgetRelativeLayout, AndroidWidgetTextView, JavaLangCharSequence,
 };
 use jaffi_support::jni::{
     objects::{JObject, JString, JValue},
@@ -26,7 +24,6 @@ fn android_main(app: AndroidApp) {
     );
     info!("before hello world");
     println!("before hello world");
-    let _ = ndk_context_jni_test(app.clone());
     let mut quit = false;
     let mut redraw_pending = true;
     let mut native_window: Option<ndk::native_window::NativeWindow> = None;
@@ -44,13 +41,14 @@ fn android_main(app: AndroidApp) {
                         redraw_pending = true;
                     }
                     PollEvent::Main(main_event) => {
-                        info!("Main event: {:?}", main_event);
+                        info!("Main event: {:#?}", main_event);
                         match main_event {
                             MainEvent::SaveState { saver, .. } => {
                                 saver.store("foo://bar".as_bytes());
                             }
                             MainEvent::Pause => {}
                             MainEvent::Resume { loader, .. } => {
+                                let _ = ndk_context_jni_test(app.clone());
                                 if let Some(state) = loader.load() {
                                     if let Ok(uri) = String::from_utf8(state) {
                                         info!("Resumed with saved state = {uri:#?}");
@@ -77,6 +75,7 @@ fn android_main(app: AndroidApp) {
                                 info!("Config Changed: {:#?}", app.config());
                             }
                             MainEvent::LowMemory => {}
+                            MainEvent::Start => {}
 
                             MainEvent::Destroy => quit = true,
                             _ => { /* ... */ }
@@ -136,7 +135,6 @@ fn android_main(app: AndroidApp) {
                         }
 
                         info!("Render...");
-                        //let _ = ndk_context_jni_test(app.clone(), native_window);
                     }
                 }
             },
@@ -171,9 +169,6 @@ fn ndk_context_jni_test(
     );
     let string = env.new_string("foobar").expect("Failed to build string");
 
-
-
-
     let jchar_array = env.new_char_array(10).expect("Failed to build char array");
     let _ = env.set_char_array_region(
         jchar_array,
@@ -200,19 +195,36 @@ fn ndk_context_jni_test(
         .as_android_view_view()
         .set_background_color(*env, 0x000000);
 
-
     let layout =
         AndroidWidgetLinearLayout::new_1android_widget_linear_layout_landroid_content_context_2(
             *env, context,
         );
     layout.set_orientation(*env, 1);
-    layout.as_android_view_view_group().as_android_view_view().set_padding(*env, 16, 16, 16, 16);
+    layout
+        .as_android_view_view_group()
+        .as_android_view_view()
+        .set_padding(*env, 16, 16, 16, 16);
     layout
         .as_android_view_view_group()
         .add_view_landroid_view_view_2(*env, text_view.as_android_view_view());
     let activity =
         AndroidAppActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
     let window = activity.get_window(*env);
+    let current_view = window.get_decor_view(*env);
+    current_view.set_background_color(*env, 0x00FF00);
+    current_view.set_top(*env, 100);
+    current_view.set_bottom(*env, 100);
+    let layout_inflator = window.get_layout_inflater(*env);
+
+    let params = current_view.get_layout_params(*env);
+
+    println!(
+        "CURRENT VIEW: {}, {}, {}, {}",
+        current_view.to_string(*env),
+        current_view.get_height(*env),
+        current_view.get_width(*env),
+        current_view.to_string(*env),
+    );
     /*
     layout
         .as_android_view_view_group()
@@ -222,7 +234,7 @@ fn ndk_context_jni_test(
     //view_group.add_view_landroid_view_view_2(*env, text_view.as_android_view_view());
     window.set_content_view_landroid_view_view_2(
         *env,
-        layout.as_android_view_view_group().as_android_view_view()
+        layout.as_android_view_view_group().as_android_view_view(),
     );
 
     let text_editor_view =
