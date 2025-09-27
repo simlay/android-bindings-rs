@@ -75,7 +75,7 @@ jobs:
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2.34.0
         with:
-          api-level: 34
+          api-level: 36
           force-avd-creation: false
           target: google_apis
           arch: x86_64
@@ -87,7 +87,7 @@ jobs:
         env:
           RANLIB: ${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ranlib
         with:
-          api-level: 34
+          api-level: 36
           target: google_apis
           arch: x86_64
           force-avd-creation: false
@@ -95,14 +95,11 @@ jobs:
           disable-animations: true
           script: |
             cargo apk run --target x86_64-linux-android --example simple --no-logcat
-
-      - name: Get a screenshot of the app.
-        run: |
-          sleep 10
-          adb exec-out screencap -p > screen.png
-          SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i screen.png)" | jq -r '.data.display_url')
-          export SCREENSHOT_URL
-          echo \`\`\` >> Summary.md
-          echo "## SCREENSHOT" >> Summary.md
-          echo "![Screenshot](${SCREENSHOT_URL})" >> Summary.md
-          cat Summary.md >> "$GITHUB_STEP_SUMMARY"
+            sleep 10
+            adb exec-out screencap -p > screen.png
+            SCREENSHOT_URL=$(curl --location --request POST "https://api.imgbb.com/1/upload?expiration=2592000&key=${{secrets.IMGBB_API_KEY}}" --form "image=$(base64 -i screen.png)" | jq -r '.data.display_url')
+            export SCREENSHOT_URL
+            echo \`\`\` >> Summary.md
+            echo "## SCREENSHOT" >> Summary.md
+            echo "![Screenshot](${SCREENSHOT_URL})" >> Summary.md
+            cat Summary.md >> "$GITHUB_STEP_SUMMARY"
