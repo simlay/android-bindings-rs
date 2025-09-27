@@ -57,7 +57,7 @@ jobs:
             ~/.cargo/registry
             target
           key: ${{runner.os}}-${{runner.arch}}-${{ github.workflow }}-${{ github.job }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - run: cargo install cargo-apk
+      - run: cargo install cargo-apk --force
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
