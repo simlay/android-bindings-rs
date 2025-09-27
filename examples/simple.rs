@@ -12,25 +12,17 @@ use jaffi_support::jni::{
     objects::{JObject, JString, JValue},
     strings::{JNIStr, JNIString, JavaStr},
     sys::{jbyte, jchar},
-    JavaVM,
-    JNIEnv,
+    JNIEnv, JavaVM,
 };
 use log::info;
 use winit::{
-    raw_window_handle::{HasRawWindowHandle, RawWindowHandle},
-    event_loop::{
-        EventLoop,
-        EventLoopBuilder,
-        ActiveEventLoop,
-    },
-    platform::android::{
-        EventLoopBuilderExtAndroid,
-        activity::AndroidApp,
-    },
     application::ApplicationHandler,
+    event_loop::{ActiveEventLoop, EventLoop, EventLoopBuilder},
+    platform::android::{activity::AndroidApp, EventLoopBuilderExtAndroid},
+    raw_window_handle::{HasRawWindowHandle, RawWindowHandle},
 };
 
-pub struct App<'a>{
+pub struct App<'a> {
     android_app: AndroidApp,
     env: JNIEnv<'a>,
 }
@@ -54,44 +46,80 @@ impl ApplicationHandler<()> for App<'_> {
         //let _ = ndk_context_jni_test(self.android_app.clone());
         println!("WINDOW EVENT: {:?}", event);
         match event {
-            winit::event::WindowEvent::ActivationTokenDone { serial, token } => { },
-            winit::event::WindowEvent::Resized(physical_size) => { },
-            winit::event::WindowEvent::Moved(physical_position) => { },
-            winit::event::WindowEvent::CloseRequested => { },
-            winit::event::WindowEvent::Destroyed => { },
-            winit::event::WindowEvent::DroppedFile(path_buf) => { },
-            winit::event::WindowEvent::HoveredFile(path_buf) => { },
-            winit::event::WindowEvent::HoveredFileCancelled => { },
+            winit::event::WindowEvent::ActivationTokenDone { serial, token } => {}
+            winit::event::WindowEvent::Resized(physical_size) => {}
+            winit::event::WindowEvent::Moved(physical_position) => {}
+            winit::event::WindowEvent::CloseRequested => {}
+            winit::event::WindowEvent::Destroyed => {}
+            winit::event::WindowEvent::DroppedFile(path_buf) => {}
+            winit::event::WindowEvent::HoveredFile(path_buf) => {}
+            winit::event::WindowEvent::HoveredFileCancelled => {}
             winit::event::WindowEvent::Focused(_) => {
                 #[cfg(feature = "example_exit")]
                 std::process::exit(0);
-            },
-            winit::event::WindowEvent::KeyboardInput { device_id, event, is_synthetic } => { },
-            winit::event::WindowEvent::ModifiersChanged(modifiers) => { },
-            winit::event::WindowEvent::Ime(ime) => { },
-            winit::event::WindowEvent::CursorMoved { device_id, position } => { },
-            winit::event::WindowEvent::CursorEntered { device_id } => { },
-            winit::event::WindowEvent::CursorLeft { device_id } => { },
-            winit::event::WindowEvent::MouseWheel { device_id, delta, phase } => { },
-            winit::event::WindowEvent::MouseInput { device_id, state, button } => { },
-            winit::event::WindowEvent::PinchGesture { device_id, delta, phase } => { },
-            winit::event::WindowEvent::PanGesture { device_id, delta, phase } => { },
-            winit::event::WindowEvent::DoubleTapGesture { device_id } => { },
-            winit::event::WindowEvent::RotationGesture { device_id, delta, phase } => { },
-            winit::event::WindowEvent::TouchpadPressure { device_id, pressure, stage } => { },
-            winit::event::WindowEvent::AxisMotion { device_id, axis, value } => { },
-            winit::event::WindowEvent::Touch(touch) => { },
-            winit::event::WindowEvent::ScaleFactorChanged { scale_factor, inner_size_writer } => { },
-            winit::event::WindowEvent::ThemeChanged(theme) => { },
-            winit::event::WindowEvent::Occluded(_) => { },
-            winit::event::WindowEvent::RedrawRequested => { },
+            }
+            winit::event::WindowEvent::KeyboardInput {
+                device_id,
+                event,
+                is_synthetic,
+            } => {}
+            winit::event::WindowEvent::ModifiersChanged(modifiers) => {}
+            winit::event::WindowEvent::Ime(ime) => {}
+            winit::event::WindowEvent::CursorMoved {
+                device_id,
+                position,
+            } => {}
+            winit::event::WindowEvent::CursorEntered { device_id } => {}
+            winit::event::WindowEvent::CursorLeft { device_id } => {}
+            winit::event::WindowEvent::MouseWheel {
+                device_id,
+                delta,
+                phase,
+            } => {}
+            winit::event::WindowEvent::MouseInput {
+                device_id,
+                state,
+                button,
+            } => {}
+            winit::event::WindowEvent::PinchGesture {
+                device_id,
+                delta,
+                phase,
+            } => {}
+            winit::event::WindowEvent::PanGesture {
+                device_id,
+                delta,
+                phase,
+            } => {}
+            winit::event::WindowEvent::DoubleTapGesture { device_id } => {}
+            winit::event::WindowEvent::RotationGesture {
+                device_id,
+                delta,
+                phase,
+            } => {}
+            winit::event::WindowEvent::TouchpadPressure {
+                device_id,
+                pressure,
+                stage,
+            } => {}
+            winit::event::WindowEvent::AxisMotion {
+                device_id,
+                axis,
+                value,
+            } => {}
+            winit::event::WindowEvent::Touch(touch) => {}
+            winit::event::WindowEvent::ScaleFactorChanged {
+                scale_factor,
+                inner_size_writer,
+            } => {}
+            winit::event::WindowEvent::ThemeChanged(theme) => {}
+            winit::event::WindowEvent::Occluded(_) => {}
+            winit::event::WindowEvent::RedrawRequested => {}
         }
         /*
-        */
+         */
     }
 }
-
-
 
 /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
 fn create_views(
@@ -210,137 +238,136 @@ fn android_main(android_app: AndroidApp) {
     let args = std::env::args();
     println!("ARGS:{args:?}");
 
-    let mut event_loop : EventLoopBuilder<()> = EventLoop::with_user_event();
+    let mut event_loop: EventLoopBuilder<()> = EventLoop::with_user_event();
     event_loop.with_android_app(android_app.clone());
     let event_loop = event_loop.build().expect("Failed to build event loop");
     let ctx = ndk_context::android_context();
-    let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }.expect("Failed to get vm") ;
-    let env = vm.attach_current_thread_permanently().expect("Failed to get env from vm");
+    let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }.expect("Failed to get vm");
+    let env = vm
+        .attach_current_thread_permanently()
+        .expect("Failed to get env from vm");
     //ndk_context_jni_test(android_app.clone(), env);
-    let mut winit_app = App {
-        android_app,
-        env,
-    };
+    let mut winit_app = App { android_app, env };
     let _ = event_loop.run_app(&mut winit_app).expect("Fail to run app");
 
     /*
-    let mut quit = false;
-    let mut redraw_pending = true;
-    let mut native_window: Option<ndk::native_window::NativeWindow> = None;
-    while !quit {
-        app.poll_events(
-            Some(std::time::Duration::from_secs(1)), /* timeout */
-            |event| {
-                match event {
-                    PollEvent::Wake => {
-                        info!("Early wake up");
-                    }
-                    PollEvent::Timeout => {
-                        info!("Timed out");
-                        // Real app would probably rely on vblank sync via graphics API...
-                        redraw_pending = true;
-                    }
-                    PollEvent::Main(main_event) => {
-                        info!("Main event: {:#?}", main_event);
-                        match main_event {
-                            MainEvent::SaveState { saver, .. } => {
-                                saver.store("foo://bar".as_bytes());
-                            }
-                            MainEvent::Pause => {}
-                            MainEvent::Resume { loader, .. } => {
-                                let _ = ndk_context_jni_test(app.clone());
-                                if let Some(state) = loader.load() {
-                                    if let Ok(uri) = String::from_utf8(state) {
-                                        info!("Resumed with saved state = {uri:#?}");
+        let mut quit = false;
+        let mut redraw_pending = true;
+        let mut native_window: Option<ndk::native_window::NativeWindow> = None;
+        while !quit {
+            app.poll_events(
+                Some(std::time::Duration::from_secs(1)), /* timeout */
+                |event| {
+                    match event {
+                        PollEvent::Wake => {
+                            info!("Early wake up");
+                        }
+                        PollEvent::Timeout => {
+                            info!("Timed out");
+                            // Real app would probably rely on vblank sync via graphics API...
+                            redraw_pending = true;
+                        }
+                        PollEvent::Main(main_event) => {
+                            info!("Main event: {:#?}", main_event);
+                            match main_event {
+                                MainEvent::SaveState { saver, .. } => {
+                                    saver.store("foo://bar".as_bytes());
+                                }
+                                MainEvent::Pause => {}
+                                MainEvent::Resume { loader, .. } => {
+                                    let _ = ndk_context_jni_test(app.clone());
+                                    if let Some(state) = loader.load() {
+                                        if let Ok(uri) = String::from_utf8(state) {
+                                            info!("Resumed with saved state = {uri:#?}");
+                                        }
                                     }
                                 }
-                            }
-                            MainEvent::InitWindow { .. } => {
-                                native_window = app.native_window();
-                                redraw_pending = true;
-                            }
-                            MainEvent::TerminateWindow { .. } => {
-                                native_window = None;
-                            }
-                            MainEvent::WindowResized { .. } => {
-                                redraw_pending = true;
-                            }
-                            MainEvent::RedrawNeeded { .. } => {
-                                redraw_pending = true;
-                            }
-                            MainEvent::InputAvailable { .. } => {
-                                redraw_pending = true;
-                            }
-                            MainEvent::ConfigChanged { .. } => {
-                                info!("Config Changed: {:#?}", app.config());
-                            }
-                            MainEvent::LowMemory => {}
-                            MainEvent::Start => {}
+                                MainEvent::InitWindow { .. } => {
+                                    native_window = app.native_window();
+                                    redraw_pending = true;
+                                }
+                                MainEvent::TerminateWindow { .. } => {
+                                    native_window = None;
+                                }
+                                MainEvent::WindowResized { .. } => {
+                                    redraw_pending = true;
+                                }
+                                MainEvent::RedrawNeeded { .. } => {
+                                    redraw_pending = true;
+                                }
+                                MainEvent::InputAvailable { .. } => {
+                                    redraw_pending = true;
+                                }
+                                MainEvent::ConfigChanged { .. } => {
+                                    info!("Config Changed: {:#?}", app.config());
+                                }
+                                MainEvent::LowMemory => {}
+                                MainEvent::Start => {}
 
-                            MainEvent::Destroy => quit = true,
-                            _ => { /* ... */ }
+                                MainEvent::Destroy => quit = true,
+                                _ => { /* ... */ }
+                            }
                         }
+                        _ => {}
                     }
-                    _ => {}
-                }
 
-                if redraw_pending {
-                    if let Some(native_window) = &native_window {
-                        redraw_pending = false;
+                    if redraw_pending {
+                        if let Some(native_window) = &native_window {
+                            redraw_pending = false;
 
-                        // Handle input, via a lending iterator
-                        match app.input_events_iter() {
-                            Ok(mut iter) => loop {
-                                info!("Checking for next input event...");
-                                if !iter.next(|event| {
-                                    match event {
-                                        InputEvent::KeyEvent(key_event) => {
-                                            info!("GOT A KEY EVENT:{:?}", key_event.key_code());
-                                        }
-                                        InputEvent::MotionEvent(motion_event) => {
-                                            println!("action = {:?}", motion_event.action());
-                                            match motion_event.action() {
-                                                MotionAction::Up => {
-                                                    let pointer = motion_event.pointer_index();
-                                                    let pointer =
-                                                        motion_event.pointer_at_index(pointer);
-                                                    let x = pointer.x();
-                                                    let y = pointer.y();
-
-                                                    println!("POINTER UP {x}, {y}");
-                                                    if x < 200.0 && y < 200.0 {
-                                                        println!("Requesting to show keyboard");
-                                                        app.show_soft_input(true);
-                                                    }
-                                                }
-                                                _ => {}
+                            // Handle input, via a lending iterator
+                            match app.input_events_iter() {
+                                Ok(mut iter) => loop {
+                                    info!("Checking for next input event...");
+                                    if !iter.next(|event| {
+                                        match event {
+                                            InputEvent::KeyEvent(key_event) => {
+                                                info!("GOT A KEY EVENT:{:?}", key_event.key_code());
                                             }
+                                            InputEvent::MotionEvent(motion_event) => {
+                                                println!("action = {:?}", motion_event.action());
+                                                match motion_event.action() {
+                                                    MotionAction::Up => {
+                                                        let pointer = motion_event.pointer_index();
+                                                        let pointer =
+                                                            motion_event.pointer_at_index(pointer);
+                                                        let x = pointer.x();
+                                                        let y = pointer.y();
+
+                                                        println!("POINTER UP {x}, {y}");
+                                                        if x < 200.0 && y < 200.0 {
+                                                            println!("Requesting to show keyboard");
+                                                            app.show_soft_input(true);
+                                                        }
+                                                    }
+                                                    _ => {}
+                                                }
+                                            }
+                                            InputEvent::TextEvent(state) => {
+                                                info!("Input Method State: {state:?}");
+                                            }
+                                            _ => {}
                                         }
-                                        InputEvent::TextEvent(state) => {
-                                            info!("Input Method State: {state:?}");
-                                        }
-                                        _ => {}
+
+                                        info!("Input Event: {event:?}");
+                                        InputStatus::Unhandled
+                                    }) {
+                                        info!("No more input available");
+                                        break;
                                     }
-
-                                    info!("Input Event: {event:?}");
-                                    InputStatus::Unhandled
-                                }) {
-                                    info!("No more input available");
-                                    break;
+                                },
+                                Err(err) => {
+                                    log::error!("Failed to get input events iterator: {err:?}");
                                 }
-                            },
-                            Err(err) => {
-                                log::error!("Failed to get input events iterator: {err:?}");
                             }
-                        }
 
-                        info!("Render...");
+                            info!("Render...");
+                        }
                     }
-                }
-            },
-        );
-    }
-*/
+                },
+            );
+        }
+    */
 
     info!("after hello world");
     println!("after hello world");
