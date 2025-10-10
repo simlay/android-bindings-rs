@@ -13,7 +13,7 @@ crate-type = ["cdylib"]
 
 [build-dependencies]
 jaffi = { version = "0.2.0" }
-zip = "5.1.1"
+zip = "6.0.0"
 
 [target.'cfg(target_os = "android")'.dependencies]
 jaffi_support = { version = "0.2.0" }
