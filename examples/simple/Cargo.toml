@@ -25,7 +25,7 @@ android-bindings = { path = "../../" }
 
 [package.metadata.android.sdk]
 min_sdk_version = 21
-target_sdk_version = 34
+target_sdk_version = 36
 
 [package.metadata.android]
 package = "com.simlay.example"
