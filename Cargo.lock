@@ -208,9 +208,9 @@ dependencies = [
 
 [[package]]
 name = "cafebabe"
-version = "0.8.1"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7793c9b8e18fb8f7d64126e9c5b5ec660b25d2af97869c56c770f9c01b836f0f"
+checksum = "3cb5eea41dce128eb8257a90648a2392b0ec58a4bc9fcfa5d97e3e79abc7c020"
 dependencies = [
  "bitflags 1.3.2",
  "cesu8",
@@ -633,6 +633,7 @@ dependencies = [
 [[package]]
 name = "jaffi"
 version = "0.2.0"
+source = "git+https://github.com/simlay/jaffi.git?branch=android-bindings#6155f4fb9784825a7ab00ca91461b749aec03881"
 dependencies = [
  "cafebabe",
  "enum-as-inner",
@@ -647,6 +648,7 @@ dependencies = [
 [[package]]
 name = "jaffi_support"
 version = "0.2.0"
+source = "git+https://github.com/simlay/jaffi.git?branch=android-bindings#6155f4fb9784825a7ab00ca91461b749aec03881"
 dependencies = [
  "jni 0.20.0",
 ]
