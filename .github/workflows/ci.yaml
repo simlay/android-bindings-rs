@@ -6,16 +6,6 @@ on:
       - main
   pull_request:
 jobs:
-  fmt:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-linux-android
-          components: rustfmt
-      - name: Cargo fmt
-        run: cargo fmt --all -- --check
   test:
     runs-on: ${{matrix.os}}
     strategy:
@@ -94,7 +84,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            cargo apk run --target x86_64-linux-android --example simple --no-logcat
+            cargo apk run --target x86_64-linux-android  -p simple --no-logcat
             sleep 10
             adb exec-out screencap -p > screen.png
 

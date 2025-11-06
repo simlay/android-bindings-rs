@@ -71,13 +71,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let class_path = class_path();
     let classes = vec![
         ////Cow::from("android.annotation.AttrRes"),
-        //Cow::from("android.view.ViewGroup.LayoutParams"),
-        //Cow::from("java.lang.CharSequence"),
         //Cow::from("java.lang.String"),
     ];
     let classes_to_wrap = vec![
         //Cow::from("android.annotation.AttrRes"),
         // Does not work
+        Cow::from("android.R"),
+        //Cow::from("android.R.id"),
+        //Cow::from("android.R.layout"),
         Cow::from("android.app.Activity"),
         Cow::from("android.util.AndroidException"),
         Cow::from("android.util.AttributeSet"),
@@ -88,6 +89,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.view.View"),
         Cow::from("android.view.Window"),
         Cow::from("android.view.ViewGroup"),
+        Cow::from("android.view.ViewGroup$LayoutParams"),
         Cow::from("android.graphics.drawable.Drawable"),
         Cow::from("android.graphics.Color"),
         Cow::from("android.widget.EditText"),
@@ -98,6 +100,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.widget.Button"),
         Cow::from("android.view.autofill.AutofillId"),
         Cow::from("android.view.autofill.AutofillManager"),
+        Cow::from("java.lang.CharSequence"),
+        //Cow::from("java.lang.String"),
         //Cow::from("android.view.Surface"),
     ];
     let output_dir = PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR not set"));
