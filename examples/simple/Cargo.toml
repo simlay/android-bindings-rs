@@ -14,12 +14,11 @@ example_exit = []
 jaffi_support = { version = "0.2.0" }
 #jni = "0.21"
 log = "0.4.14"
-ndk = { version = "0.9", features = ["api-level-31"] }
-ndk-sys = "0.6.0+11769913"
+#ndk = { version = "0.9", features = ["api-level-31"] }
+#ndk-sys = "0.6.0+11769913"
 ndk-context = "0.1.1"
 android_logger = "0.15.0"
 android-activity = { version = "0.6", features = ["native-activity"] }
-libc = "0.2"
 winit = { version = "0.30.0", features = ["android-native-activity"] }
 android-bindings = { path = "../../" }
 
@@ -33,3 +32,4 @@ package = "com.simlay.example"
 [package.metadata.android.application]
 debuggable = true
 theme = "@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen"
+#theme = "@style/Theme.AppCompat.Light"

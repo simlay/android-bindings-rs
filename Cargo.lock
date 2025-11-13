@@ -1379,11 +1379,8 @@ dependencies = [
  "android-bindings",
  "android_logger",
  "jaffi_support",
- "libc",
  "log",
- "ndk",
  "ndk-context",
- "ndk-sys",
  "winit",
 ]
 

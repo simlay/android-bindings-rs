@@ -51,9 +51,10 @@ fn extract_jar(file: PathBuf) {
     }
 }
 
-fn class_path() -> PathBuf {
-    let android_jar = if let Ok(android_jar) = std::env::var("ANDROID_JAR") {
-        PathBuf::from(android_jar)
+fn class_path(jar: Option<String>) -> PathBuf {
+
+    let android_jar = if let Some(jar) = jar {
+        PathBuf::from(jar)
     } else {
         let android_home =
             PathBuf::from(std::env::var("ANDROID_HOME").expect("ANDROID_HOME not set"));
@@ -68,7 +69,8 @@ fn class_path() -> PathBuf {
 fn main() -> Result<(), Box<dyn Error>> {
     // only need this if you need to compile the java, this is needed for the integration tests...
 
-    let class_path = class_path();
+    let android_source = class_path(std::env::var("ANDROID_JAR").ok());
+    //let androidx_fragment = class_path(Some("fragment-1.6.0-sources.jar".to_string()));
     let classes = vec![
         ////Cow::from("android.annotation.AttrRes"),
         //Cow::from("java.lang.String"),
@@ -79,11 +81,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.R"),
         //Cow::from("android.R.id"),
         //Cow::from("android.R.layout"),
+        Cow::from("android.app.NativeActivity"),
         Cow::from("android.app.Activity"),
         Cow::from("android.util.AndroidException"),
         Cow::from("android.util.AttributeSet"),
         Cow::from("android.content.IntentSender"),
         Cow::from("android.view.ContextThemeWrapper"),
+        Cow::from("android.view.SurfaceView"),
         // Works
         Cow::from("android.view.KeyEvent"),
         Cow::from("android.view.View"),
@@ -100,6 +104,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.widget.Button"),
         Cow::from("android.view.autofill.AutofillId"),
         Cow::from("android.view.autofill.AutofillManager"),
+        // AndroidX
+        //Cow::from("androidx.fragment.app.FragmentActivity"),
+
+        // Java Defaults
         Cow::from("java.lang.CharSequence"),
         //Cow::from("java.lang.String"),
         //Cow::from("android.view.Surface"),
@@ -112,7 +120,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         .output_filename(&output_file)
         .native_classes(classes)
         .classes_to_wrap(classes_to_wrap)
-        .classpath(vec![Cow::from(class_path)])
+        .classpath(vec![
+            Cow::from(android_source),
+            //Cow::from(androidx_fragment),
+        ])
         .build();
 
     jaffi.generate()?;

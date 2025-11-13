@@ -2,7 +2,7 @@
     "rust-analyzer": {
         "initialization_options": {
             "cargo": {
-                "target": "x86_64-linux-android"
+                "target": "aarch64-linux-android"
             },
             "completion": { "autoimport": {"enable": false } },
             "procMacro": { "enable": true }

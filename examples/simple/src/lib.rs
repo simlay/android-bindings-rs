@@ -1,16 +1,20 @@
 use android_activity::{
     input::{InputEvent, KeyAction, KeyEvent, KeyMapChar, MotionAction},
     InputStatus, MainEvent, PollEvent,
+    WindowManagerFlags,
 };
 use android_bindings::{
-    AndroidAppActivity, AndroidContentContext, AndroidGraphicsColor,
+    AndroidAppActivity,
+    AndroidAppNativeActivity,
+    AndroidContentContext, AndroidGraphicsColor,
     AndroidViewAutofillAutofillManager, AndroidViewViewGroupLayoutParams, AndroidViewWindow,
     AndroidWidgetEditText, AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams,
     AndroidWidgetRelativeLayout,
     AndroidWidgetTextView, JavaLangCharSequence,
     AndroidWidgetButton,
+    AndroidViewSurfaceView,
     //AndroidR,
-    AndroidWidgetTextViewBufferType,
+    AndroidViewViewGroup,
 };
 use jaffi_support::jni::{
     objects::{JObject, JString, JValue},
@@ -59,6 +63,8 @@ fn create_views(
     env: JNIEnv,
     //native_window: &ndk::native_window::NativeWindow,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    let config = app.config();
+    println!("CONFIG : {config:#?}");
 
     // Get a VM for executing JNI calls
     let ctx = ndk_context::android_context();
@@ -66,96 +72,46 @@ fn create_views(
 
     let context = AndroidContentContext::from(unsafe { JObject::from_raw(ctx.context().cast()) });
 
+    // This works in java and android studio:
+    // https://stackoverflow.com/a/39515370
 
-    /*
+    let activity =
+        AndroidAppNativeActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
+    let activity = activity.as_android_app_activity();
+
+    // TODO: use this call  activity.run_on_ui_thread(...)
+
+    let jstring = env.new_string("foobaraoeusnthaoeus").expect("Failed to build string");
+    let jchar_seq = JavaLangCharSequence::from(jstring);
+
+
     let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
         env, context,
     );
-    text_view
-        .as_android_view_view()
-        .set_background_color(env, 0x000000);
-    */
-    // This works in java and android studio:
-    // https://stackoverflow.com/a/39515370
-    let lin_layout =
-        AndroidWidgetLinearLayout::new_1android_widget_linear_layout_landroid_content_context_2(
-            env, context,
-        );
-
-    lin_layout.set_orientation(env, 1);
-    /*
-    lin_layout
-        .as_android_view_view_group()
-        .as_android_view_view()
-        .set_padding(env, 16, 16, 16, 16);
-    lin_layout
-        .as_android_view_view_group()
-        .add_view_landroid_view_view_2(env, text_view.as_android_view_view());
-    */
-    let lin_layout_param : AndroidViewViewGroupLayoutParams = AndroidViewViewGroupLayoutParams::new_1android_view_view_group_024layout_params_ii(
-            env, -1, -1,
-    );
-
-    let activity =
-        AndroidAppActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
-    let window = activity.get_window(env);
-
-    /*
-    let decor_view = window.get_decor_view(env);
-    let root_view = decor_view.find_view_by_id(env, 16908290);
-    root_view.set_background_color(env, 0x00FF00);
-    root_view.set_minimum_height(env, 1000);
-    root_view.set_minimum_width(env, 1000);
-
-
-    println!(
-        "ROOT VIEW: {}, {}",
-        root_view.get_height(env),
-        root_view.get_width(env),
-    );
-    */
-    /*
-    window.set_content_view_i(
-        env,
-        16908290,
-    );
-    */
-    window.set_content_view_landroid_view_view_2landroid_view_view_group_024layout_params_2(
-        env,
-        lin_layout.as_android_view_view_group().as_android_view_view(),
-        lin_layout_param
-    );
-
-    window.set_content_view_landroid_view_view_2(
-        env,
-        lin_layout.as_android_view_view_group().as_android_view_view(),
-    );
-
-    let lp_view : AndroidViewViewGroupLayoutParams = AndroidViewViewGroupLayoutParams::new_1android_view_view_group_024layout_params_ii(
-            env, -2, -2,
-    );
-
-    let text_view =
-        AndroidWidgetEditText::new_1android_widget_edit_text_landroid_content_context_2(
-            env, context,
-        );
-    let jstring = env.new_string("foobar").expect("Failed to build string");
-    let jchar_seq = JavaLangCharSequence::from(jstring);
-
-    println!("STRING: {}", jchar_seq.to_string(env));
-    text_view.as_android_widget_text_view().set_text_keep_state_ljava_lang_char_sequence_2(
+    text_view.set_text_keep_state_ljava_lang_char_sequence_2(
         env,
         jchar_seq,
     );
-    println!("STRING: {}", text_view.as_android_widget_text_view().get_text(env).to_string(env));
-    /*
-    */
-    text_view.as_android_widget_text_view().as_android_view_view().set_layout_params(env, lp_view);
-    lin_layout.as_android_view_view_group().add_view_landroid_view_view_2landroid_view_view_group_024layout_params_2(
+    text_view.as_android_view_view().set_background_color(env, 0x00000_i32);
+
+    text_view.set_text_color_i(env, 0x0000000_i32);
+    text_view.set_text_size_f(env, 48.);
+    text_view.as_android_view_view().set_elevation(env, 100.);
+
+    let window = activity.get_window(env);
+
+    let content_view = activity.get_window(env).get_decor_view(env);
+    let surface_view = AndroidViewSurfaceView::from(*content_view);
+    //surface_view.set_z_order_on_top(env, false);
+    //surface_view.set_z_order_media_overlay(env, true);
+    let content_view = AndroidViewViewGroup::from(*content_view);
+    //content_view.remove_all_views(env);
+    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+    content_view.add_view_landroid_view_view_2(
         env,
-        text_view.as_android_widget_text_view().as_android_view_view(),
-        lp_view
+        text_view.as_android_view_view(),
     );
+    println!("CHILD COUNT: {}", content_view.get_child_count(env));
 
     /*
     let button = AndroidWidgetButton::new_1android_widget_button_landroid_content_context_2(env, context);
@@ -167,6 +123,29 @@ fn create_views(
     );
     */
 
+    /*
+    let null_bundle = AndroidOsBundle::from(JObject::null());
+    let null_persistable_bundle = AndroidOsPersistableBundle::from(JObject::null());
+    activity.on_create(env, null_bundle, null_persistable_bundle);
+    */
+
+    /*
+    let activity = unsafe { JObject::from_raw(app.activity_as_ptr() as *mut _) };
+    let activity_class = env.get_object_class(activity).expect("Failed to get activity class");
+    let super_class = env.get_superclass(activity_class).expect("Failed to get super glass from activity");
+    let on_create_method = env.get_method_id(
+        super_class,
+        "onCreate",
+        "(Landroid/os/Bundle;)V"
+    ).expect("Failed to get method id");;
+
+    env.call_method_unchecked(
+        activity,
+        on_create_method,
+        jaffi_support::jni::signature::ReturnType::Primitive(jaffi_support::jni::signature::Primitive::Void),
+        &[JValue::Object(JObject::null()).into()],
+    ).expect("Failed to call onCreate");
+    */
 
     println!("Added the text editor view");
 
@@ -177,10 +156,7 @@ fn android_main(android_app: AndroidApp) {
     android_logger::init_once(
         android_logger::Config::default().with_max_level(log::LevelFilter::Info),
     );
-    info!("before hello world");
-    println!("before hello world");
     let args = std::env::args();
-    println!("ARGS:{args:?}");
 
     let mut event_loop: EventLoopBuilder<()> = EventLoop::with_user_event();
     event_loop.with_android_app(android_app.clone());
@@ -193,7 +169,5 @@ fn android_main(android_app: AndroidApp) {
     //ndk_context_jni_test(android_app.clone(), env);
     let mut winit_app = App { android_app, env };
     let _ = event_loop.run_app(&mut winit_app).expect("Fail to run app");
-
-    info!("after hello world");
-    println!("after hello world");
+    println!("Android_main: {}", std::backtrace::Backtrace::force_capture());
 }
