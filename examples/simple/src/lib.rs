@@ -81,7 +81,7 @@ fn create_views(
 
     // TODO: use this call  activity.run_on_ui_thread(...)
 
-    let jstring = env.new_string("foobaraoeusnthaoeus").expect("Failed to build string");
+    let jstring = env.new_string("Text View from Rust!").expect("Failed to build string");
     let jchar_seq = JavaLangCharSequence::from(jstring);
 
 
@@ -92,9 +92,11 @@ fn create_views(
         env,
         jchar_seq,
     );
-    text_view.as_android_view_view().set_background_color(env, 0x00000_i32);
+    // Set white background for visibility
+    text_view.as_android_view_view().set_background_color(env, 0xFFFFFFFF_u32 as i32);
 
-    text_view.set_text_color_i(env, 0x0000000_i32);
+    // Set black text color (visible on white background)
+    text_view.set_text_color_i(env, 0xFF000000_u32 as i32);
     text_view.set_text_size_f(env, 48.);
     text_view.as_android_view_view().set_elevation(env, 100.);
 
@@ -107,9 +109,19 @@ fn create_views(
     let content_view = AndroidViewViewGroup::from(*content_view);
     //content_view.remove_all_views(env);
     println!("CHILD COUNT: {}", content_view.get_child_count(env));
-    content_view.add_view_landroid_view_view_2(
+
+    // Create layout parameters: WRAP_CONTENT (-2) for both width and height
+    let layout_params = AndroidViewViewGroupLayoutParams::new_1android_view_view_group_024layout_params_ii(
+        env,
+        -2,  // WRAP_CONTENT
+        -2,  // WRAP_CONTENT
+    );
+
+    // Add view with layout parameters
+    content_view.add_view_landroid_view_view_2landroid_view_view_group_024layout_params_2(
         env,
         text_view.as_android_view_view(),
+        layout_params,
     );
     println!("CHILD COUNT: {}", content_view.get_child_count(env));
 

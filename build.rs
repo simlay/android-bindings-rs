@@ -88,6 +88,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.content.IntentSender"),
         Cow::from("android.view.ContextThemeWrapper"),
         Cow::from("android.view.SurfaceView"),
+        //Cow::from("android.os.Debug"),
         // Works
         Cow::from("android.view.KeyEvent"),
         Cow::from("android.view.View"),

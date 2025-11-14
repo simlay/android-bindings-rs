@@ -19,7 +19,7 @@ jaffi_support = { version = "0.2.0" }
 
 
 [patch.crates-io]
-jaffi = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }
+jaffi         = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }
 jaffi_support = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }
 #jaffi =         { path = "../jaffi/" }
 #jaffi_support = { path = "../jaffi/jaffi_support/" }
