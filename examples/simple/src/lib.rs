@@ -1,33 +1,35 @@
+/*
 use android_activity::{
     input::{InputEvent, KeyAction, KeyEvent, KeyMapChar, MotionAction},
     InputStatus, MainEvent, PollEvent,
     WindowManagerFlags,
 };
+*/
 use android_bindings::{
-    AndroidAppActivity,
+    //AndroidAppActivity,
     AndroidAppNativeActivity,
     AndroidContentContext, AndroidGraphicsColor,
     AndroidViewAutofillAutofillManager, AndroidViewViewGroupLayoutParams, AndroidViewWindow,
-    AndroidWidgetEditText, AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams,
-    AndroidWidgetRelativeLayout,
+    //AndroidWidgetEditText, AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams,
+    //AndroidWidgetRelativeLayout,
     AndroidWidgetTextView, JavaLangCharSequence,
-    AndroidWidgetButton,
+    //AndroidWidgetButton,
     AndroidViewSurfaceView,
     //AndroidR,
     AndroidViewViewGroup,
 };
 use jaffi_support::jni::{
-    objects::{JObject, JString, JValue},
-    strings::{JNIStr, JNIString, JavaStr},
-    sys::{jbyte, jchar},
+    objects::JObject,
+    //objects::{JObject, JString, JValue},
+    //strings::{JNIStr, JNIString, JavaStr},
+    //sys::{jbyte, jchar},
     JNIEnv, JavaVM,
 };
-use log::info;
 use winit::{
     application::ApplicationHandler,
     event_loop::{ActiveEventLoop, EventLoop, EventLoopBuilder},
     platform::android::{activity::AndroidApp, EventLoopBuilderExtAndroid},
-    raw_window_handle::{HasRawWindowHandle, RawWindowHandle},
+    //raw_window_handle::{HasRawWindowHandle, RawWindowHandle},
 };
 
 pub struct App<'a> {
@@ -81,8 +83,7 @@ fn create_views(
 
     // TODO: use this call  activity.run_on_ui_thread(...)
 
-    let jstring = env.new_string("Text View from Rust!").expect("Failed to build string");
-    let jchar_seq = JavaLangCharSequence::from(jstring);
+    let jchar_seq = JavaLangCharSequence::from(env.new_string("Text View from Rust!")?);
 
 
     let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
@@ -102,12 +103,20 @@ fn create_views(
 
     let window = activity.get_window(env);
 
-    let content_view = activity.get_window(env).get_decor_view(env);
-    let surface_view = AndroidViewSurfaceView::from(*content_view);
+    let decor_view = activity.get_window(env).get_decor_view(env);
     //surface_view.set_z_order_on_top(env, false);
     //surface_view.set_z_order_media_overlay(env, true);
-    let content_view = AndroidViewViewGroup::from(*content_view);
-    //content_view.remove_all_views(env);
+    let content_view = AndroidViewViewGroup::from(*decor_view);
+    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+    let content_view = AndroidViewViewGroup::from(
+        *content_view.get_child_at(env, 0)
+    );
+    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+    let content_view = AndroidViewViewGroup::from(
+        *content_view.get_child_at(env, 1)
+    );
+
+    content_view.remove_all_views(env);
     println!("CHILD COUNT: {}", content_view.get_child_count(env));
 
     // Create layout parameters: WRAP_CONTENT (-2) for both width and height
