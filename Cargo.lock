@@ -623,7 +623,7 @@ dependencies = [
 [[package]]
 name = "jaffi"
 version = "0.2.0"
-source = "git+https://github.com/simlay/jaffi.git?branch=android-bindings#b08d1fe254095de25b755f8a5b6a823645e822b4"
+source = "git+https://github.com/simlay/jaffi.git?branch=android-bindings#3326791d98538411dd02e7f0f93382dc16bc754c"
 dependencies = [
  "cafebabe",
  "enum-as-inner",
@@ -638,7 +638,7 @@ dependencies = [
 [[package]]
 name = "jaffi_support"
 version = "0.2.0"
-source = "git+https://github.com/simlay/jaffi.git?branch=android-bindings#b08d1fe254095de25b755f8a5b6a823645e822b4"
+source = "git+https://github.com/simlay/jaffi.git?branch=android-bindings#3326791d98538411dd02e7f0f93382dc16bc754c"
 dependencies = [
  "jni 0.20.0",
 ]
@@ -1367,9 +1367,9 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "simd-adler32"
-version = "0.3.7"
+version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
+checksum = "e320a6c5ad31d271ad523dcf3ad13e2767ad8b1cb8f047f75a8aeaf8da139da2"
 
 [[package]]
 name = "simple"

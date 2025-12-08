@@ -102,7 +102,6 @@ impl ApplicationHandler<()> for App<'_> {
     }
 }
 
-/*
 /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
 fn create_views(
     app: AndroidApp,
@@ -116,7 +115,7 @@ fn create_views(
     let ctx = ndk_context::android_context();
     let _vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }?;
 
-    let ctx = AndroidContentContext::from(unsafe { JObject::from_raw(ctx.context().cast()) });
+    let ctx = android_bindings::android::content::Context::from(unsafe { JObject::from_raw(ctx.context().cast()) });
     //let window = app.native_window().expect("Failed to get window");
     //let (height, width) = (window.height(), window.width());
     //log::debug!("WINDOW HEIGHT: {height}, width: {width}");
@@ -124,16 +123,15 @@ fn create_views(
     // This works in java and android studio:
     // https://stackoverflow.com/a/39515370
 
-    let activity =
-        AndroidAppNativeActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
-    let activity = activity.as_android_app_activity();
+    let activity = android_bindings::android::app::NativeActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
+    let activity = activity.as_activity();
 
     // TODO: use this call
     // activity.run_on_ui_thread(...)
 
-    let jchar_seq = JavaLangCharSequence::from(env.new_string("Text View from Rust!")?);
+    let jchar_seq = android_bindings::java::lang::CharSequence::from(env.new_string("Text View from Rust!")?);
 
-    let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
+    let text_view = android_bindings::android::widget::TextView::new_1android_widget_text_view_landroid_content_context_2(
         env, ctx,
     );
 
@@ -143,21 +141,21 @@ fn create_views(
     );
 
     // Set white background for visibility
-    text_view.as_android_view_view().set_background_color(env, 0xFFFFFFFF_u32 as i32);
+    text_view.as_view().set_background_color(env, 0xFFFFFFFF_u32 as i32);
 
     // Set black text color (visible on white background)
     text_view.set_text_color_i(env, 0xFF000000_u32 as i32);
     text_view.set_text_size_f(env, 48.);
-    text_view.as_android_view_view().set_elevation(env, 100.);
+    text_view.as_view().set_elevation(env, 100.);
 
     let window = activity.get_window(env);
 
-    let frame_layout = AndroidWidgetFrameLayout::new_1android_widget_frame_layout_landroid_content_context_2(env, ctx);
+    let frame_layout = android_bindings::android::widget::FrameLayout::new_1android_widget_frame_layout_landroid_content_context_2(env, ctx);
 
-    frame_layout.as_android_view_view_group().add_view_landroid_view_view_2(env, text_view.as_android_view_view());
-    window.set_content_view_landroid_view_view_2(env, frame_layout.as_android_view_view_group().as_android_view_view());
-    frame_layout.as_android_view_view_group().as_android_view_view().invalidate(env);
-    frame_layout.as_android_view_view_group().as_android_view_view().measure(env, 1000, 1000);
+    frame_layout.as_view_group().add_view_landroid_view_view_2(env, text_view.as_view());
+    window.set_content_view_landroid_view_view_2(env, frame_layout.as_view_group().as_view());
+    frame_layout.as_view_group().as_view().invalidate(env);
+    frame_layout.as_view_group().as_view().measure(env, 1000, 1000);
 
     /*
     let decor_view = window.get_decor_view(env);
@@ -238,7 +236,6 @@ fn create_views(
 
     Ok(())
 }
-*/
 #[unsafe(no_mangle)]
 fn android_main(android_app: AndroidApp) {
     android_logger::init_once(
