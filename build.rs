@@ -76,22 +76,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         //Cow::from("java.lang.String"),
     ];
     let classes_to_wrap = vec![
-        //Cow::from("android.annotation.AttrRes"),
-        // Does not work
+
         Cow::from("android.R"),
-        //Cow::from("android.R.id"),
-        //Cow::from("android.R.layout"),
-        Cow::from("android.app.NativeActivity"),
         Cow::from("android.app.Activity"),
+        Cow::from("android.app.NativeActivity"),
         Cow::from("android.util.AndroidException"),
         Cow::from("android.util.AttributeSet"),
         Cow::from("android.content.IntentSender"),
         Cow::from("android.view.ContextThemeWrapper"),
         Cow::from("android.view.SurfaceView"),
-        //Cow::from("android.os.Debug"),
+        // This results in a duplicate exception field in the enum: Cow::from("android.os.Debug"),
+
         // Works
         Cow::from("android.view.KeyEvent"),
-        Cow::from("android.view.View"),
         Cow::from("android.view.Window"),
         Cow::from("android.view.ViewGroup"),
         Cow::from("android.view.ViewGroup$LayoutParams"),
@@ -101,15 +98,23 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.widget.TextView"),
         Cow::from("android.widget.RelativeLayout"),
         Cow::from("android.widget.LinearLayout"),
+        Cow::from("android.widget.FrameLayout"),
+        /*
+        */
         //Cow::from("android.view.LayoutInflater"),
         Cow::from("android.widget.Button"),
         Cow::from("android.view.autofill.AutofillId"),
+        Cow::from("android.view.View"),
         Cow::from("android.view.autofill.AutofillManager"),
         // AndroidX
         //Cow::from("androidx.fragment.app.FragmentActivity"),
 
         // Java Defaults
         Cow::from("java.lang.CharSequence"),
+        Cow::from("java.lang.Runnable"),
+        Cow::from("java.lang.Exception"),
+        Cow::from("java.util.ArrayList"),
+        //Cow::from("java.io.PrintWriter"),
         //Cow::from("java.lang.String"),
         //Cow::from("android.view.Surface"),
     ];
@@ -118,7 +123,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let jaffi = Jaffi::builder()
         .output_dir(&output_dir)
-        .output_filename(&output_file)
+        .path_modules(true)
+        //.output_filename(&output_file)
         .native_classes(classes)
         .classes_to_wrap(classes_to_wrap)
         .classpath(vec![

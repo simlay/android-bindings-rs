@@ -5,19 +5,24 @@ use android_activity::{
     WindowManagerFlags,
 };
 */
+/*
 use android_bindings::{
     //AndroidAppActivity,
     AndroidAppNativeActivity,
     AndroidContentContext, AndroidGraphicsColor,
     AndroidViewAutofillAutofillManager, AndroidViewViewGroupLayoutParams, AndroidViewWindow,
-    //AndroidWidgetEditText, AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams,
+    AndroidWidgetEditText, AndroidWidgetLinearLayout, AndroidWidgetLinearLayoutLayoutParams,
     //AndroidWidgetRelativeLayout,
+    AndroidWidgetFrameLayout,
     AndroidWidgetTextView, JavaLangCharSequence,
     //AndroidWidgetButton,
     AndroidViewSurfaceView,
     //AndroidR,
     AndroidViewViewGroup,
+
+    JavaLangRunnable,
 };
+*/
 use jaffi_support::jni::{
     objects::JObject,
     //objects::{JObject, JString, JValue},
@@ -38,13 +43,13 @@ pub struct App<'a> {
 }
 impl ApplicationHandler<()> for App<'_> {
     fn new_events(&mut self, _event_loop: &ActiveEventLoop, cause: winit::event::StartCause) {
-        println!("NEW EVENT: {cause:?}");
+        log::debug!("NEW EVENT: {cause:?}");
         if cause == winit::event::StartCause::Init {
-            create_views(self.android_app.clone(), self.env).expect("Failed to create views");
+            //create_views(self.android_app.clone(), self.env).expect("Failed to create views");
         }
     }
     fn resumed(&mut self, _event_loop: &ActiveEventLoop) {
-        //println!("RESUMED: {:?}", event_loop);
+        //log::debug!("RESUMED: {:?}", event_loop);
     }
 
     fn window_event(
@@ -53,12 +58,51 @@ impl ApplicationHandler<()> for App<'_> {
         _window_id: winit::window::WindowId,
         event: winit::event::WindowEvent,
     ) {
+        log::debug!("WINDOW EVENT: {:?}", event);
+        match event {
+            winit::event::WindowEvent::RedrawRequested => {
+                //create_views(self.android_app.clone(), self.env).expect("Failed to create views");
+            },
+            winit::event::WindowEvent::Focused(true) => {
+                //create_views(self.android_app.clone(), self.env).expect("Failed to create views");
+            },
+            _other => {
+
+            },
+            winit::event::WindowEvent::ActivationTokenDone { serial, token } => todo!(),
+            winit::event::WindowEvent::Resized(physical_size) => todo!(),
+            winit::event::WindowEvent::Moved(physical_position) => todo!(),
+            winit::event::WindowEvent::CloseRequested => todo!(),
+            winit::event::WindowEvent::Destroyed => todo!(),
+            winit::event::WindowEvent::DroppedFile(path_buf) => todo!(),
+            winit::event::WindowEvent::HoveredFile(path_buf) => todo!(),
+            winit::event::WindowEvent::HoveredFileCancelled => todo!(),
+            winit::event::WindowEvent::Focused(_) => todo!(),
+            winit::event::WindowEvent::KeyboardInput { device_id, event, is_synthetic } => todo!(),
+            winit::event::WindowEvent::ModifiersChanged(modifiers) => todo!(),
+            winit::event::WindowEvent::Ime(ime) => todo!(),
+            winit::event::WindowEvent::CursorMoved { device_id, position } => todo!(),
+            winit::event::WindowEvent::CursorEntered { device_id } => todo!(),
+            winit::event::WindowEvent::CursorLeft { device_id } => todo!(),
+            winit::event::WindowEvent::MouseWheel { device_id, delta, phase } => todo!(),
+            winit::event::WindowEvent::MouseInput { device_id, state, button } => todo!(),
+            winit::event::WindowEvent::PinchGesture { device_id, delta, phase } => todo!(),
+            winit::event::WindowEvent::PanGesture { device_id, delta, phase } => todo!(),
+            winit::event::WindowEvent::DoubleTapGesture { device_id } => todo!(),
+            winit::event::WindowEvent::RotationGesture { device_id, delta, phase } => todo!(),
+            winit::event::WindowEvent::TouchpadPressure { device_id, pressure, stage } => todo!(),
+            winit::event::WindowEvent::AxisMotion { device_id, axis, value } => todo!(),
+            winit::event::WindowEvent::Touch(touch) => todo!(),
+            winit::event::WindowEvent::ScaleFactorChanged { scale_factor, inner_size_writer } => todo!(),
+            winit::event::WindowEvent::ThemeChanged(theme) => todo!(),
+            winit::event::WindowEvent::Occluded(_) => todo!(),
+        }
         //create_views(self.android_app.clone(), self.env).expect("Failed to create views");
         //let _ = ndk_context_jni_test(self.android_app.clone());
-        println!("WINDOW EVENT: {:?}", event);
     }
 }
 
+/*
 /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
 fn create_views(
     app: AndroidApp,
@@ -66,13 +110,16 @@ fn create_views(
     //native_window: &ndk::native_window::NativeWindow,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let config = app.config();
-    println!("CONFIG : {config:#?}");
+    log::debug!("CONFIG : {config:#?}");
 
     // Get a VM for executing JNI calls
     let ctx = ndk_context::android_context();
     let _vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }?;
 
-    let context = AndroidContentContext::from(unsafe { JObject::from_raw(ctx.context().cast()) });
+    let ctx = AndroidContentContext::from(unsafe { JObject::from_raw(ctx.context().cast()) });
+    //let window = app.native_window().expect("Failed to get window");
+    //let (height, width) = (window.height(), window.width());
+    //log::debug!("WINDOW HEIGHT: {height}, width: {width}");
 
     // This works in java and android studio:
     // https://stackoverflow.com/a/39515370
@@ -81,18 +128,20 @@ fn create_views(
         AndroidAppNativeActivity::from(unsafe { JObject::from_raw(app.activity_as_ptr().cast()) });
     let activity = activity.as_android_app_activity();
 
-    // TODO: use this call  activity.run_on_ui_thread(...)
+    // TODO: use this call
+    // activity.run_on_ui_thread(...)
 
     let jchar_seq = JavaLangCharSequence::from(env.new_string("Text View from Rust!")?);
 
-
     let text_view = AndroidWidgetTextView::new_1android_widget_text_view_landroid_content_context_2(
-        env, context,
+        env, ctx,
     );
+
     text_view.set_text_keep_state_ljava_lang_char_sequence_2(
         env,
         jchar_seq,
     );
+
     // Set white background for visibility
     text_view.as_android_view_view().set_background_color(env, 0xFFFFFFFF_u32 as i32);
 
@@ -103,36 +152,53 @@ fn create_views(
 
     let window = activity.get_window(env);
 
-    let decor_view = activity.get_window(env).get_decor_view(env);
-    //surface_view.set_z_order_on_top(env, false);
-    //surface_view.set_z_order_media_overlay(env, true);
+    let frame_layout = AndroidWidgetFrameLayout::new_1android_widget_frame_layout_landroid_content_context_2(env, ctx);
+
+    frame_layout.as_android_view_view_group().add_view_landroid_view_view_2(env, text_view.as_android_view_view());
+    window.set_content_view_landroid_view_view_2(env, frame_layout.as_android_view_view_group().as_android_view_view());
+    frame_layout.as_android_view_view_group().as_android_view_view().invalidate(env);
+    frame_layout.as_android_view_view_group().as_android_view_view().measure(env, 1000, 1000);
+
+    /*
+    let decor_view = window.get_decor_view(env);
     let content_view = AndroidViewViewGroup::from(*decor_view);
-    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+    log::debug!("CHILD COUNT: {}", content_view.get_child_count(env));
     let content_view = AndroidViewViewGroup::from(
         *content_view.get_child_at(env, 0)
     );
-    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+
+    log::debug!("CHILD COUNT: {}", content_view.get_child_count(env));
     let content_view = AndroidViewViewGroup::from(
         *content_view.get_child_at(env, 1)
     );
 
-    content_view.remove_all_views(env);
-    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+    //content_view.remove_all_views(env);
+    log::debug!("CHILD COUNT: {}", content_view.get_child_count(env));
 
     // Create layout parameters: WRAP_CONTENT (-2) for both width and height
     let layout_params = AndroidViewViewGroupLayoutParams::new_1android_view_view_group_024layout_params_ii(
         env,
-        -2,  // WRAP_CONTENT
-        -2,  // WRAP_CONTENT
+        -1,  // MATCH_PARENT
+        -1,  // MATCH_PARENT
     );
 
+    content_view.add_view_landroid_view_view_2landroid_view_view_group_024layout_params_2(
+        env,
+        lin_layout.as_android_view_view_group().as_android_view_view(),
+        layout_params,
+    );
+    lin_layout.as_android_view_view_group().add_view_landroid_view_view_2(env, text_view.as_android_view_view());
+    */
+
+    /*
     // Add view with layout parameters
     content_view.add_view_landroid_view_view_2landroid_view_view_group_024layout_params_2(
         env,
         text_view.as_android_view_view(),
         layout_params,
     );
-    println!("CHILD COUNT: {}", content_view.get_child_count(env));
+    log::debug!("CHILD COUNT: {}", content_view.get_child_count(env));
+    */
 
     /*
     let button = AndroidWidgetButton::new_1android_widget_button_landroid_content_context_2(env, context);
@@ -168,14 +234,15 @@ fn create_views(
     ).expect("Failed to call onCreate");
     */
 
-    println!("Added the text editor view");
+    log::debug!("Added the text editor view");
 
     Ok(())
 }
+*/
 #[unsafe(no_mangle)]
 fn android_main(android_app: AndroidApp) {
     android_logger::init_once(
-        android_logger::Config::default().with_max_level(log::LevelFilter::Info),
+        android_logger::Config::default().with_max_level(log::LevelFilter::Trace),
     );
     let args = std::env::args();
 
@@ -190,5 +257,5 @@ fn android_main(android_app: AndroidApp) {
     //ndk_context_jni_test(android_app.clone(), env);
     let mut winit_app = App { android_app, env };
     let _ = event_loop.run_app(&mut winit_app).expect("Fail to run app");
-    println!("Android_main: {}", std::backtrace::Backtrace::force_capture());
+    log::debug!("Android_main: {}", std::backtrace::Backtrace::force_capture());
 }

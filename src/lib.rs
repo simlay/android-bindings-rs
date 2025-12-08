@@ -18,11 +18,13 @@ mod bindings {
     )]
 
     include!(concat!(env!("OUT_DIR"), "/generated_jaffi.rs"));
+    /*
     impl From<jaffi_support::jni::objects::JString<'_>> for JavaLangCharSequence<'_> {
         fn from(jstring: jaffi_support::jni::objects::JString<'_>) -> Self {
             JavaLangCharSequence::from(unsafe { JObject::from_raw(jstring.into_raw()) })
         }
     }
+    */
 }
 
 //mod generated_jaffi;
