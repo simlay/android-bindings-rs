@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["OnBackInvokedDispatcher","OnBackInvokedDispatcherClass","SplashScreen","SplashScreenClass"],"trait":["StaticOnBackInvokedDispatcher","StaticSplashScreen"]};

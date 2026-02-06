@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Consumer","ConsumerClass","Predicate","PredicateClass","UnaryOperator","UnaryOperatorClass"],"trait":["StaticConsumer","StaticPredicate","StaticUnaryOperator"]};
