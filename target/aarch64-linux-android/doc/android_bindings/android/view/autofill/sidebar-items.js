@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AutofillId","AutofillIdClass","AutofillManager","AutofillManagerAutofillCallback","AutofillManagerAutofillCallbackClass","AutofillManagerClass","AutofillValue","AutofillValueClass"],"trait":["StaticAutofillId","StaticAutofillManager","StaticAutofillManagerAutofillCallback","StaticAutofillValue"]};

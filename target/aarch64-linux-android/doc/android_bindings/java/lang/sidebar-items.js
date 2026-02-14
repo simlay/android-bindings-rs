@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CharSequence","CharSequenceClass","Exception","ExceptionClass","Runnable","RunnableClass"],"trait":["StaticCharSequence","StaticException","StaticRunnable"]};
