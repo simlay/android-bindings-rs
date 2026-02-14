@@ -67,13 +67,16 @@ fn class_path(jar: Option<String>) -> PathBuf {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
+    javac::Build::new()
+        .file("java/com/example/NativeRunnable.java")
+        .compile();
     // only need this if you need to compile the java, this is needed for the integration tests...
 
     let android_source = class_path(std::env::var("ANDROID_JAR").ok());
     //let androidx_fragment = class_path(Some("fragment-1.6.0-sources.jar".to_string()));
     let classes = vec![
         ////Cow::from("android.annotation.AttrRes"),
-        //Cow::from("java.lang.String"),
+        //Cow::from("com.example.NativeRunnable"),
     ];
     let classes_to_wrap = vec![
 
@@ -92,6 +95,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.view.Window"),
         Cow::from("android.view.ViewGroup"),
         Cow::from("android.view.ViewGroup$LayoutParams"),
+        Cow::from("android.view.ViewManager"),
+        Cow::from("android.view.WindowManager"),
+        Cow::from("android.view.WindowManager$LayoutParams"),
         Cow::from("android.graphics.drawable.Drawable"),
         Cow::from("android.graphics.Color"),
         Cow::from("android.widget.EditText"),
@@ -99,6 +105,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.widget.RelativeLayout"),
         Cow::from("android.widget.LinearLayout"),
         Cow::from("android.widget.FrameLayout"),
+        Cow::from("android.widget.PopupWindow"),
         /*
         */
         //Cow::from("android.view.LayoutInflater"),
@@ -129,7 +136,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .classes_to_wrap(classes_to_wrap)
         .classpath(vec![
             Cow::from(android_source),
-            //Cow::from(androidx_fragment),
+            Cow::from(output_dir.join("javac-build/classes")),
         ])
         .build();
 
