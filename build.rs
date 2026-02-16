@@ -65,12 +65,35 @@ fn class_path(jar: Option<String>) -> PathBuf {
     }
     PathBuf::from("target/android-src/")
 }
+fn build_dex() {
+        let out_dir = std::env::var("OUT_DIR").unwrap();
+        let android_jar_path = android_build::android_jar(None)
+            .expect("Failed to find android.jar");
+
+        // Compile Java → .class
+        android_build::JavaBuild::new()
+            .class_path(&android_jar_path)
+            .classes_out_dir(std::path::PathBuf::from(&out_dir))
+            .file("java/com/example/NativeRunnable.java")
+            .compile()
+            .expect("javac failed");
+
+        // DEX the .class → classes.dex
+        android_build::Dexer::new()
+            .out_dir(std::path::PathBuf::from(&out_dir))
+            .file(
+                std::path::PathBuf::from(&out_dir)
+                    .join("com/example/NativeRunnable.class")
+            )
+            .run()
+            .expect("d8 failed");
+
+        // Tell cargo to re-run if the java source changes
+        println!("cargo:rerun-if-changed=java/com/example/NativeRunnable.java");
+}
 
 fn main() -> Result<(), Box<dyn Error>> {
-    javac::Build::new()
-        .file("java/com/example/NativeRunnable.java")
-        .compile();
-    // only need this if you need to compile the java, this is needed for the integration tests...
+    build_dex();
 
     let android_source = class_path(std::env::var("ANDROID_JAR").ok());
     //let androidx_fragment = class_path(Some("fragment-1.6.0-sources.jar".to_string()));
@@ -121,6 +144,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("java.lang.Runnable"),
         Cow::from("java.lang.Exception"),
         Cow::from("java.util.ArrayList"),
+        //Cow::from("java.lang.ClassLoader"),
+        Cow::from("dalvik.system.InMemoryDexClassLoader"),
         //Cow::from("java.io.PrintWriter"),
         //Cow::from("java.lang.String"),
         //Cow::from("android.view.Surface"),

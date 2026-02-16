@@ -41,7 +41,8 @@ where
     let ptr = Box::into_raw(Box::new(boxed)) as jlong;
 
     // Find NativeRunnable class and create instance
-    let class = env.find_class("com/example/NativeRunnable")?;
+    //let class = env.find_class("com/example/NativeRunnable")?;
+    let class = load_native_runnable_class(env);
     let obj = env.new_object(class, "(J)V", &[JValue::Long(ptr)])?;
 
     Ok(java::lang::Runnable::from(obj))
@@ -74,5 +75,67 @@ pub extern "system" fn Java_com_example_NativeRunnable_nativeDrop(
             let _ = Box::from_raw(ptr as *mut RunnableClosure);
             // Box is dropped here, freeing the closure
         }
+    }
+}
+use std::sync::OnceLock;
+
+static NATIVE_RUNNABLE_CLASS: OnceLock<jni::objects::GlobalRef> = OnceLock::new();
+
+pub fn init(env: JNIEnv) {
+    let class = load_native_runnable_class(env);
+}
+static DEX_BYTES: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/classes.dex"));
+
+pub fn load_native_runnable_class (
+    env: JNIEnv,
+) -> jni::objects::JClass {
+    if let Some(global) = NATIVE_RUNNABLE_CLASS.get() {
+        JClass::from(global.as_obj())
+    } else {
+        let byte_array = unsafe { JObject::from_raw(env.byte_array_from_slice(DEX_BYTES).unwrap()) };
+        let byte_buffer = env.call_static_method(
+            "java/nio/ByteBuffer",
+            "wrap",
+            "([B)Ljava/nio/ByteBuffer;",
+            &[byte_array.into()],
+        ).unwrap().l().unwrap();
+
+        let dex_loader = env.new_object(
+            "dalvik/system/InMemoryDexClassLoader",
+            "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V",
+            &[
+            byte_buffer.into(),
+            jni::objects::JObject::null().into(),
+            ],
+        ).unwrap();
+
+        let class_name = env.new_string("com.example.NativeRunnable").unwrap();
+        let loaded = env.call_method(
+            dex_loader,
+            "loadClass",
+            "(Ljava/lang/String;)Ljava/lang/Class;",
+            &[class_name.into()],
+        ).unwrap().l().unwrap();
+
+        let class = jni::objects::JClass::from(loaded);
+        // Register native methods explicitly so JNI can find them
+        env.register_native_methods(
+            class,
+            &[
+            jni::NativeMethod {
+                name: "nativeRun".into(),
+                sig: "(J)V".into(),
+                fn_ptr: Java_com_example_NativeRunnable_nativeRun as *mut std::ffi::c_void,
+            },
+            jni::NativeMethod {
+                name: "nativeDrop".into(),
+                sig: "(J)V".into(),
+                fn_ptr: Java_com_example_NativeRunnable_nativeDrop as *mut std::ffi::c_void,
+            },
+            ],
+        ).expect("Failed to register native methods");
+        let global = env.new_global_ref(class).unwrap();
+        NATIVE_RUNNABLE_CLASS.set(global).ok();
+        class
     }
 }

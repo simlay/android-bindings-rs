@@ -16,7 +16,7 @@ android:
   #  - assets/unsupported.html
   #runtime_libs:
   #  - ../../target/x/debug/android/arm64/cargo/aarch64-linux-android/debug/build/android-bindings-82d26ba09f44b04c/out/javac-build/classes/com/example/
-  gradle: true
+  #gradle: true
   manifest:
     package: app.polarbear
     sdk:
