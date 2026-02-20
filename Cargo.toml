@@ -18,6 +18,8 @@ android-build = "0.1.3"
 
 [target.'cfg(target_os = "android")'.dependencies]
 jaffi_support = { version = "0.2.0" }
+android-activity = { version = "0.6", features = ["native-activity"] }
+ndk-context = "0.1.1"
 
 
 [patch.crates-io]

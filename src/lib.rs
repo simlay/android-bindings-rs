@@ -1,8 +1,8 @@
 pub use crate::bindings::{
     *,
 };
-const ANDROID_R_ID_CONTENT: i32 = 16908290;
-const ANDROID_R_COLOR_TRANSPARENT: i32 = 17170445;
+pub const ANDROID_R_ID_CONTENT: i32 = 16908290;
+pub const ANDROID_R_COLOR_TRANSPARENT: i32 = 17170445;
 
 mod bindings {
     #![allow(
@@ -16,9 +16,29 @@ mod bindings {
     )]
 
     include!(concat!(env!("OUT_DIR"), "/generated_jaffi.rs"));
+
     impl From<jaffi_support::jni::objects::JString<'_>> for java::lang::CharSequence<'_> {
         fn from(jstring: jaffi_support::jni::objects::JString<'_>) -> Self {
             Self::from(unsafe { JObject::from_raw(jstring.into_raw()) })
+        }
+    }
+    impl From<android_activity::AndroidApp> for android::app::NativeActivity<'_> {
+        fn from(app: android_activity::AndroidApp) -> Self {
+            Self::from(unsafe {
+                JObject::from_raw(app.activity_as_ptr().cast())
+            })
+        }
+    }
+    impl From<ndk_context::AndroidContext> for android::content::Context<'_> {
+        fn from(ctx: ndk_context::AndroidContext) -> Self {
+            Self::from(unsafe {
+                JObject::from_raw(ctx.context().cast())
+            })
+        }
+    }
+    impl Default for android::content::Context<'_> {
+        fn default() -> Self {
+            Self::from(ndk_context::android_context())
         }
     }
 }
@@ -81,9 +101,6 @@ use std::sync::OnceLock;
 
 static NATIVE_RUNNABLE_CLASS: OnceLock<jni::objects::GlobalRef> = OnceLock::new();
 
-pub fn init(env: JNIEnv) {
-    let class = load_native_runnable_class(env);
-}
 static DEX_BYTES: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/classes.dex"));
 
 pub fn load_native_runnable_class (

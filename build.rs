@@ -122,6 +122,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         Cow::from("android.view.WindowManager"),
         Cow::from("android.view.WindowManager$LayoutParams"),
         Cow::from("android.graphics.drawable.Drawable"),
+        Cow::from("android.graphics.drawable.ColorDrawable"),
         Cow::from("android.graphics.Color"),
         Cow::from("android.widget.EditText"),
         Cow::from("android.widget.TextView"),

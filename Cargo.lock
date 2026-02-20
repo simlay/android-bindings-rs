@@ -82,10 +82,12 @@ dependencies = [
 name = "android-bindings"
 version = "0.1.0"
 dependencies = [
+ "android-activity",
  "android-build",
  "jaffi",
  "jaffi_support",
  "javac",
+ "ndk-context",
  "zip",
 ]
 
@@ -1496,6 +1498,7 @@ dependencies = [
  "log",
  "ndk",
  "ndk-context",
+ "ndk-sys",
  "winit",
 ]
 
