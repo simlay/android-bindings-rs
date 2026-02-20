@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AndroidException","AndroidExceptionClass","AttributeSet","AttributeSetClass","LongSparseArray","LongSparseArrayClass","SparseArray","SparseArrayClass","TypedValue","TypedValueClass"],"trait":["StaticAndroidException","StaticAttributeSet","StaticLongSparseArray","StaticSparseArray","StaticTypedValue"]};

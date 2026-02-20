@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["UserData","UserDataClass"],"trait":["StaticUserData"]};

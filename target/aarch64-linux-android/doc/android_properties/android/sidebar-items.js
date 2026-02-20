@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["plat_get_property_info","plat_getprop","plat_prop_values","plat_setprop"]};

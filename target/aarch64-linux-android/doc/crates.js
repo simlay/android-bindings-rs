@@ -1,0 +1,2 @@
+window.ALL_CRATES = ["android_activity","android_bindings","android_properties","bitflags","bytes","cesu8","cfg_if","combine","jaffi_support","jni","jni_sys","libc","log","memchr","ndk","ndk_context","ndk_sys","num_enum","thiserror"];
+//{"start":21,"fragment_lengths":[18,19,21,11,8,8,9,10,16,6,10,7,6,9,6,14,10,11,12]}

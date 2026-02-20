@@ -1,0 +1,454 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `StaticColor` trait in crate `android_bindings`."><title>StaticColor in android_bindings::android::graphics - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="android_bindings" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0-nightly (7f99507f5 2026-02-19)" data-channel="nightly" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../static.files/storage-41dd4d93.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc trait"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">StaticColor</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../android_bindings/index.html">android_<wbr>bindings</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Static<wbr>Color</a></h2><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.alpha_i" title="alpha_i">alpha_i</a></li><li><a href="#method.alpha_j" title="alpha_j">alpha_j</a></li><li><a href="#method.argb_ffff" title="argb_ffff">argb_ffff</a></li><li><a href="#method.argb_iiii" title="argb_iiii">argb_iiii</a></li><li><a href="#method.blue_i" title="blue_i">blue_i</a></li><li><a href="#method.blue_j" title="blue_j">blue_j</a></li><li><a href="#method.color_space" title="color_space">color_space</a></li><li><a href="#method.color_to_hsv" title="color_to_hsv">color_to_hsv</a></li><li><a href="#method.convert_ffff_landroid_graphics_color_space_024connector_2" title="convert_ffff_landroid_graphics_color_space_024connector_2">convert_ffff_landroid_graphics_color_space_024connector_2</a></li><li><a href="#method.convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2" title="convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2">convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2</a></li><li><a href="#method.convert_i_landroid_graphics_color_space_2" title="convert_i_landroid_graphics_color_space_2">convert_i_landroid_graphics_color_space_2</a></li><li><a href="#method.convert_j_landroid_graphics_color_space_024connector_2" title="convert_j_landroid_graphics_color_space_024connector_2">convert_j_landroid_graphics_color_space_024connector_2</a></li><li><a href="#method.convert_j_landroid_graphics_color_space_2" title="convert_j_landroid_graphics_color_space_2">convert_j_landroid_graphics_color_space_2</a></li><li><a href="#method.green_i" title="green_i">green_i</a></li><li><a href="#method.green_j" title="green_j">green_j</a></li><li><a href="#method.hsv_to_color_3f" title="hsv_to_color_3f">hsv_to_color_3f</a></li><li><a href="#method.hsv_to_color_i_3f" title="hsv_to_color_i_3f">hsv_to_color_i_3f</a></li><li><a href="#method.is_in_color_space" title="is_in_color_space">is_in_color_space</a></li><li><a href="#method.is_srgb_j" title="is_srgb_j">is_srgb_j</a></li><li><a href="#method.is_wide_gamut_j" title="is_wide_gamut_j">is_wide_gamut_j</a></li><li><a href="#method.luminance_i" title="luminance_i">luminance_i</a></li><li><a href="#method.luminance_j" title="luminance_j">luminance_j</a></li><li><a href="#method.pack_fff" title="pack_fff">pack_fff</a></li><li><a href="#method.pack_ffff" title="pack_ffff">pack_ffff</a></li><li><a href="#method.pack_ffff_landroid_graphics_color_space_2" title="pack_ffff_landroid_graphics_color_space_2">pack_ffff_landroid_graphics_color_space_2</a></li><li><a href="#method.pack_i" title="pack_i">pack_i</a></li><li><a href="#method.parse_color" title="parse_color">parse_color</a></li><li><a href="#method.red_i" title="red_i">red_i</a></li><li><a href="#method.red_j" title="red_j">red_j</a></li><li><a href="#method.rgb_fff" title="rgb_fff">rgb_fff</a></li><li><a href="#method.rgb_iii" title="rgb_iii">rgb_iii</a></li><li><a href="#method.rgb_to_hsv" title="rgb_to_hsv">rgb_to_hsv</a></li><li><a href="#method.to_argb_j" title="to_argb_j">to_argb_j</a></li><li><a href="#method.value_of_3f_landroid_graphics_color_space_2" title="value_of_3f_landroid_graphics_color_space_2">value_of_3f_landroid_graphics_color_space_2</a></li><li><a href="#method.value_of_fff" title="value_of_fff">value_of_fff</a></li><li><a href="#method.value_of_ffff" title="value_of_ffff">value_of_ffff</a></li><li><a href="#method.value_of_ffff_landroid_graphics_color_space_2" title="value_of_ffff_landroid_graphics_color_space_2">value_of_ffff_landroid_graphics_color_space_2</a></li><li><a href="#method.value_of_i" title="value_of_i">value_of_i</a></li><li><a href="#method.value_of_j" title="value_of_j">value_of_j</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2><a href="index.html">In android_<wbr>bindings::<wbr>android::<wbr>graphics</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">android_bindings</a>::<wbr><a href="../index.html">android</a>::<wbr><a href="index.html">graphics</a></div><h1>Trait <span class="trait">Static<wbr>Color</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a> </span></div><pre class="rust item-decl"><code>pub trait StaticColor&lt;'j&gt; {
+<details class="toggle type-contents-toggle"><summary class="hideme"><span>Show 39 methods</span></summary>    // Provided methods
+    fn <a href="#method.color_space" class="fn">color_space</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.red_j" class="fn">red_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.green_j" class="fn">green_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.blue_j" class="fn">blue_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.alpha_j" class="fn">alpha_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.is_srgb_j" class="fn">is_srgb_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.is_wide_gamut_j" class="fn">is_wide_gamut_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.is_in_color_space" class="fn">is_in_color_space</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>,
+        arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.to_argb_j" class="fn">to_argb_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.value_of_i" class="fn">value_of_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.value_of_j" class="fn">value_of_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.value_of_fff" class="fn">value_of_fff</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    ) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.value_of_ffff" class="fn">value_of_ffff</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    ) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.value_of_ffff_landroid_graphics_color_space_2" class="fn">value_of_ffff_landroid_graphics_color_space_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg4: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.value_of_3f_landroid_graphics_color_space_2" class="fn">value_of_3f_landroid_graphics_color_space_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+        arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.pack_i" class="fn">pack_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.pack_fff" class="fn">pack_fff</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.pack_ffff" class="fn">pack_ffff</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.pack_ffff_landroid_graphics_color_space_2" class="fn">pack_ffff_landroid_graphics_color_space_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg4: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.convert_i_landroid_graphics_color_space_2" class="fn">convert_i_landroid_graphics_color_space_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.convert_j_landroid_graphics_color_space_2" class="fn">convert_j_landroid_graphics_color_space_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>,
+        arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2" class="fn">convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg4: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+        arg5: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.convert_j_landroid_graphics_color_space_024connector_2" class="fn">convert_j_landroid_graphics_color_space_024connector_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>,
+        arg1: <a class="struct" href="struct.ColorSpaceConnector.html" title="struct android_bindings::android::graphics::ColorSpaceConnector">ColorSpaceConnector</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.convert_ffff_landroid_graphics_color_space_024connector_2" class="fn">convert_ffff_landroid_graphics_color_space_024connector_2</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg4: <a class="struct" href="struct.ColorSpaceConnector.html" title="struct android_bindings::android::graphics::ColorSpaceConnector">ColorSpaceConnector</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.luminance_j" class="fn">luminance_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.alpha_i" class="fn">alpha_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.red_i" class="fn">red_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.green_i" class="fn">green_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.blue_i" class="fn">blue_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.rgb_iii" class="fn">rgb_iii</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.rgb_fff" class="fn">rgb_fff</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.argb_iiii" class="fn">argb_iiii</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.argb_ffff" class="fn">argb_ffff</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+        arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.luminance_i" class="fn">luminance_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.parse_color" class="fn">parse_color</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.rgb_to_hsv" class="fn">rgb_to_hsv</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg3: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.color_to_hsv" class="fn">color_to_hsv</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg1: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.hsv_to_color_3f" class="fn">hsv_to_color_3f</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.hsv_to_color_i_3f" class="fn">hsv_to_color_i_3f</a>(
+        &amp;self,
+        env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+        arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+        arg1: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+    ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a> { ... }
+</details>}</code></pre><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.color_space" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.color_space" class="fn">color_space</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>colorSpace(J)Landroid/graphics/ColorSpace;</code></p>
+<h5 id="arguments"><a class="doc-anchor" href="#arguments">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.red_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.red_j" class="fn">red_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>red(J)F</code></p>
+<h5 id="arguments-1"><a class="doc-anchor" href="#arguments-1">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.green_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.green_j" class="fn">green_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>green(J)F</code></p>
+<h5 id="arguments-2"><a class="doc-anchor" href="#arguments-2">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.blue_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.blue_j" class="fn">blue_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>blue(J)F</code></p>
+<h5 id="arguments-3"><a class="doc-anchor" href="#arguments-3">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.alpha_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.alpha_j" class="fn">alpha_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>alpha(J)F</code></p>
+<h5 id="arguments-4"><a class="doc-anchor" href="#arguments-4">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.is_srgb_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.is_srgb_j" class="fn">is_srgb_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>isSrgb(J)Z</code></p>
+<h5 id="arguments-5"><a class="doc-anchor" href="#arguments-5">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.is_wide_gamut_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.is_wide_gamut_j" class="fn">is_wide_gamut_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>isWideGamut(J)Z</code></p>
+<h5 id="arguments-6"><a class="doc-anchor" href="#arguments-6">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.is_in_color_space" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.is_in_color_space" class="fn">is_in_color_space</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>,
+    arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>isInColorSpace(JLandroid/graphics/ColorSpace;)Z</code></p>
+<h5 id="arguments-7"><a class="doc-anchor" href="#arguments-7">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.to_argb_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.to_argb_j" class="fn">to_argb_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>toArgb(J)I</code></p>
+<h5 id="arguments-8"><a class="doc-anchor" href="#arguments-8">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.value_of_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.value_of_i" class="fn">value_of_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>valueOf(I)Landroid/graphics/Color;</code></p>
+<h5 id="arguments-9"><a class="doc-anchor" href="#arguments-9">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.value_of_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.value_of_j" class="fn">value_of_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>valueOf(J)Landroid/graphics/Color;</code></p>
+<h5 id="arguments-10"><a class="doc-anchor" href="#arguments-10">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.value_of_fff" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.value_of_fff" class="fn">value_of_fff</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>valueOf(FFF)Landroid/graphics/Color;</code></p>
+<h5 id="arguments-11"><a class="doc-anchor" href="#arguments-11">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.value_of_ffff" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.value_of_ffff" class="fn">value_of_ffff</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>valueOf(FFFF)Landroid/graphics/Color;</code></p>
+<h5 id="arguments-12"><a class="doc-anchor" href="#arguments-12">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.value_of_ffff_landroid_graphics_color_space_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.value_of_ffff_landroid_graphics_color_space_2" class="fn">value_of_ffff_landroid_graphics_color_space_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg4: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>valueOf(FFFFLandroid/graphics/ColorSpace;)Landroid/graphics/Color;</code></p>
+<h5 id="arguments-13"><a class="doc-anchor" href="#arguments-13">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.value_of_3f_landroid_graphics_color_space_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.value_of_3f_landroid_graphics_color_space_2" class="fn">value_of_3f_landroid_graphics_color_space_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+    arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>valueOf([FLandroid/graphics/ColorSpace;)Landroid/graphics/Color;</code></p>
+<h5 id="arguments-14"><a class="doc-anchor" href="#arguments-14">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.pack_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.pack_i" class="fn">pack_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>pack(I)J</code></p>
+<h5 id="arguments-15"><a class="doc-anchor" href="#arguments-15">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.pack_fff" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.pack_fff" class="fn">pack_fff</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>pack(FFF)J</code></p>
+<h5 id="arguments-16"><a class="doc-anchor" href="#arguments-16">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.pack_ffff" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.pack_ffff" class="fn">pack_ffff</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>pack(FFFF)J</code></p>
+<h5 id="arguments-17"><a class="doc-anchor" href="#arguments-17">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.pack_ffff_landroid_graphics_color_space_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.pack_ffff_landroid_graphics_color_space_2" class="fn">pack_ffff_landroid_graphics_color_space_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg4: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>pack(FFFFLandroid/graphics/ColorSpace;)J</code></p>
+<h5 id="arguments-18"><a class="doc-anchor" href="#arguments-18">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.convert_i_landroid_graphics_color_space_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.convert_i_landroid_graphics_color_space_2" class="fn">convert_i_landroid_graphics_color_space_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>convert(ILandroid/graphics/ColorSpace;)J</code></p>
+<h5 id="arguments-19"><a class="doc-anchor" href="#arguments-19">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.convert_j_landroid_graphics_color_space_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.convert_j_landroid_graphics_color_space_2" class="fn">convert_j_landroid_graphics_color_space_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>,
+    arg1: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>convert(JLandroid/graphics/ColorSpace;)J</code></p>
+<h5 id="arguments-20"><a class="doc-anchor" href="#arguments-20">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2" class="fn">convert_ffff_landroid_graphics_color_space_2landroid_graphics_color_space_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg4: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+    arg5: <a class="struct" href="struct.ColorSpace.html" title="struct android_bindings::android::graphics::ColorSpace">ColorSpace</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>convert(FFFFLandroid/graphics/ColorSpace;Landroid/graphics/ColorSpace;)J</code></p>
+<h5 id="arguments-21"><a class="doc-anchor" href="#arguments-21">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.convert_j_landroid_graphics_color_space_024connector_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.convert_j_landroid_graphics_color_space_024connector_2" class="fn">convert_j_landroid_graphics_color_space_024connector_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>,
+    arg1: <a class="struct" href="struct.ColorSpaceConnector.html" title="struct android_bindings::android::graphics::ColorSpaceConnector">ColorSpaceConnector</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>convert(JLandroid/graphics/ColorSpace$Connector;)J</code></p>
+<h5 id="arguments-22"><a class="doc-anchor" href="#arguments-22">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.convert_ffff_landroid_graphics_color_space_024connector_2" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.convert_ffff_landroid_graphics_color_space_024connector_2" class="fn">convert_ffff_landroid_graphics_color_space_024connector_2</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg4: <a class="struct" href="struct.ColorSpaceConnector.html" title="struct android_bindings::android::graphics::ColorSpaceConnector">ColorSpaceConnector</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>convert(FFFFLandroid/graphics/ColorSpace$Connector;)J</code></p>
+<h5 id="arguments-23"><a class="doc-anchor" href="#arguments-23">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.luminance_j" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.luminance_j" class="fn">luminance_j</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>luminance(J)F</code></p>
+<h5 id="arguments-24"><a class="doc-anchor" href="#arguments-24">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.alpha_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.alpha_i" class="fn">alpha_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>alpha(I)I</code></p>
+<h5 id="arguments-25"><a class="doc-anchor" href="#arguments-25">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.red_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.red_i" class="fn">red_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>red(I)I</code></p>
+<h5 id="arguments-26"><a class="doc-anchor" href="#arguments-26">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.green_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.green_i" class="fn">green_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>green(I)I</code></p>
+<h5 id="arguments-27"><a class="doc-anchor" href="#arguments-27">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.blue_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.blue_i" class="fn">blue_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>blue(I)I</code></p>
+<h5 id="arguments-28"><a class="doc-anchor" href="#arguments-28">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.rgb_iii" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.rgb_iii" class="fn">rgb_iii</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>rgb(III)I</code></p>
+<h5 id="arguments-29"><a class="doc-anchor" href="#arguments-29">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.rgb_fff" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.rgb_fff" class="fn">rgb_fff</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>rgb(FFF)I</code></p>
+<h5 id="arguments-30"><a class="doc-anchor" href="#arguments-30">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.argb_iiii" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.argb_iiii" class="fn">argb_iiii</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>argb(IIII)I</code></p>
+<h5 id="arguments-31"><a class="doc-anchor" href="#arguments-31">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.argb_ffff" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.argb_ffff" class="fn">argb_ffff</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    arg3: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>argb(FFFF)I</code></p>
+<h5 id="arguments-32"><a class="doc-anchor" href="#arguments-32">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.luminance_i" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.luminance_i" class="fn">luminance_i</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>luminance(I)F</code></p>
+<h5 id="arguments-33"><a class="doc-anchor" href="#arguments-33">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.parse_color" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.parse_color" class="fn">parse_color</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>parseColor(Ljava/lang/String;)I</code></p>
+<h5 id="arguments-34"><a class="doc-anchor" href="#arguments-34">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.rgb_to_hsv" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.rgb_to_hsv" class="fn">rgb_to_hsv</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg1: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg2: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg3: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+)</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>RGBToHSV(III[F)V</code></p>
+<h5 id="arguments-35"><a class="doc-anchor" href="#arguments-35">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.color_to_hsv" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.color_to_hsv" class="fn">color_to_hsv</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, arg1: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;)</h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>colorToHSV(I[F)V</code></p>
+<h5 id="arguments-36"><a class="doc-anchor" href="#arguments-36">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.hsv_to_color_3f" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.hsv_to_color_3f" class="fn">hsv_to_color_3f</a>(&amp;self, env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;, arg0: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>HSVToColor([F)I</code></p>
+<h5 id="arguments-37"><a class="doc-anchor" href="#arguments-37">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.hsv_to_color_i_3f" class="method"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><h4 class="code-header">fn <a href="#method.hsv_to_color_i_3f" class="fn">hsv_to_color_i_3f</a>(
+    &amp;self,
+    env: <a class="struct" href="../../struct.JNIEnv.html" title="struct android_bindings::JNIEnv">JNIEnv</a>&lt;'j&gt;,
+    arg0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,
+    arg1: <a class="struct" href="../../../jaffi_support/arrays/struct.UnsupportedArray.html" title="struct jaffi_support::arrays::UnsupportedArray">UnsupportedArray</a>&lt;'j&gt;,
+) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></h4></section></summary><div class="docblock"><p>A wrapper for the java function <code>HSVToColor(I[F)I</code></p>
+<h5 id="arguments-38"><a class="doc-anchor" href="#arguments-38">§</a>Arguments</h5>
+<ul>
+<li><code>env</code> - this should be the same JNIEnv “owning” this object</li>
+</ul>
+</div></details></div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><div class="negative-marker"></div><section id="impl-StaticColor%3C'j%3E-for-Color%3C'j%3E" class="impl"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><a href="#impl-StaticColor%3C'j%3E-for-Color%3C'j%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'j&gt; <a class="trait" href="trait.StaticColor.html" title="trait android_bindings::android::graphics::StaticColor">StaticColor</a>&lt;'j&gt; for <a class="struct" href="struct.Color.html" title="struct android_bindings::android::graphics::Color">Color</a>&lt;'j&gt;</h3></section><section id="impl-StaticColor%3C'j%3E-for-ColorClass%3C'j%3E" class="impl"><a class="src rightside" href="../../../src/android_bindings/home/runner/work/android-bindings-rs/android-bindings-rs/target/aarch64-linux-android/debug/build/android-bindings-69909e86be253879/out/generated_jaffi.rs.html#1">Source</a><a href="#impl-StaticColor%3C'j%3E-for-ColorClass%3C'j%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'j&gt; <a class="trait" href="trait.StaticColor.html" title="trait android_bindings::android::graphics::StaticColor">StaticColor</a>&lt;'j&gt; for <a class="struct" href="struct.ColorClass.html" title="struct android_bindings::android::graphics::ColorClass">ColorClass</a>&lt;'j&gt;</h3></section></div><script src="../../../trait.impl/android_bindings/bindings/android/graphics/trait.StaticColor.js" async></script></section></div></main></body></html>

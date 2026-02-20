@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["InputTransferToken","InputTransferTokenClass","OnBackInvokedDispatcher","OnBackInvokedDispatcherClass","SplashScreen","SplashScreenClass","TrustedPresentationThresholds","TrustedPresentationThresholdsClass"],"trait":["StaticInputTransferToken","StaticOnBackInvokedDispatcher","StaticSplashScreen","StaticTrustedPresentationThresholds"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["FileDescriptor","FileDescriptorClass","InputStream","InputStreamClass","PrintWriter","PrintWriterClass"],"trait":["StaticFileDescriptor","StaticInputStream","StaticPrintWriter"]};

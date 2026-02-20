@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Axis","Button","InputEvent","KeyAction","KeyMapChar","KeyboardType","Keycode","MotionAction","Source","ToolType"],"struct":["ButtonState","EdgeFlags","InputIterator","KeyCharacterMap","KeyEvent","KeyEventFlags","MetaState","MotionEvent","MotionEventFlags","Pointer","PointersIter","TextInputState","TextSpan"]};

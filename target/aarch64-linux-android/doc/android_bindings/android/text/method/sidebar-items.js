@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["KeyListener","KeyListenerClass","MovementMethod","MovementMethodClass","TransformationMethod","TransformationMethodClass"],"trait":["StaticKeyListener","StaticMovementMethod","StaticTransformationMethod"]};

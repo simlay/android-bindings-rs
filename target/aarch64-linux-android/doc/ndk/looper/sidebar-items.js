@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Poll"],"struct":["FdEvent","ForeignLooper","LooperError","ThreadLooper"]};

@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A glue layer for building standalone, Rust applications on Android"><title>android_activity - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="android_activity" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0-nightly (7f99507f5 2026-02-19)" data-channel="nightly" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../static.files/storage-41dd4d93.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate android_activity</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../android_activity/index.html">android_<wbr>activity</a><span class="version">0.6.0</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#cheaply-clonable-androidapp" title="Cheaply Clonable `AndroidApp`">Cheaply Clonable <code>AndroidApp</code></a></li><li><a href="#send-and-sync-androidapp" title="`Send` and `Sync` `AndroidApp`"><code>Send</code> and <code>Sync</code> <code>AndroidApp</code></a></li><li><a href="#main-thread-initialization" title="Main Thread Initialization">Main Thread Initialization</a></li><li><a href="#android-extensible-enums" title="Android Extensible Enums">Android Extensible Enums</a></li></ul><h3><a href="#modules">Crate Items</a></h3><ul class="block"><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1>Crate <span>android_<wbr>activity</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/android_activity/lib.rs.html#1-869">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A glue layer for building standalone, Rust applications on Android</p>
+<p>This crate provides a “glue” layer for building native Rust
+applications on Android, supporting multiple <a href="https://developer.android.com/reference/android/app/Activity"><code>Activity</code></a> base classes.
+It’s comparable to <a href="https://developer.android.com/ndk/guides/concepts#naa"><code>android_native_app_glue.c</code></a>
+for C/C++ applications.</p>
+<p>Currently the crate supports two <code>Activity</code> base classes:</p>
+<ol>
+<li><a href="https://developer.android.com/reference/android/app/NativeActivity"><code>NativeActivity</code></a> - Built in to Android, this doesn’t require compiling any Java or Kotlin code.</li>
+<li><a href="https://developer.android.com/games/agdk/integrate-game-activity"><code>GameActivity</code></a> - From the Android Game Development Kit, it has more
+sophisticated input handling support than <code>NativeActivity</code>. <code>GameActivity</code>
+is also based on the <code>AndroidAppCompat</code> class which can help with supporting
+a wider range of devices.</li>
+</ol>
+<p>Standalone applications based on this crate need to be built as <code>cdylib</code> libraries, like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>[lib]
+crate_type=[<span class="string">"cdylib"</span>]</code></pre></div>
+<p>and implement a <code>#[no_mangle]</code> <code>android_main</code> entry point like this:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[no_mangle]
+</span><span class="kw">fn </span>android_main(app: AndroidApp) {
+
+}</code></pre></div>
+<p>Once your application’s <code>Activity</code> class has loaded and it calls <code>onCreate</code> then
+<code>android-activity</code> will spawn a dedicated thread to run your <code>android_main</code> function,
+separate from the Java thread that created the corresponding <code>Activity</code>.</p>
+<p><a href="struct.AndroidApp.html" title="struct android_activity::AndroidApp"><code>AndroidApp</code></a> provides an interface to query state for the application as
+well as monitor events, such as lifecycle and input events, that are
+marshalled between the Java thread that owns the <code>Activity</code> and the native
+thread that runs the <code>android_main()</code> code.</p>
+<h2 id="cheaply-clonable-androidapp"><a class="doc-anchor" href="#cheaply-clonable-androidapp">§</a>Cheaply Clonable <a href="struct.AndroidApp.html" title="struct android_activity::AndroidApp"><code>AndroidApp</code></a></h2>
+<p><a href="struct.AndroidApp.html" title="struct android_activity::AndroidApp"><code>AndroidApp</code></a> is intended to be something that can be cheaply passed around
+by referenced within an application. It is reference counted and can be
+cheaply cloned.</p>
+<h2 id="send-and-sync-androidapp"><a class="doc-anchor" href="#send-and-sync-androidapp">§</a><code>Send</code> and <code>Sync</code> <a href="struct.AndroidApp.html" title="struct android_activity::AndroidApp"><code>AndroidApp</code></a></h2>
+<p>Although an <a href="struct.AndroidApp.html" title="struct android_activity::AndroidApp"><code>AndroidApp</code></a> implements <code>Send</code> and <code>Sync</code> you do need to take
+into consideration that some APIs, such as <a href="struct.AndroidApp.html#method.poll_events" title="method android_activity::AndroidApp::poll_events"><code>AndroidApp::poll_events()</code></a> are
+explicitly documented to only be usable from your <code>android_main()</code> thread.</p>
+<h2 id="main-thread-initialization"><a class="doc-anchor" href="#main-thread-initialization">§</a>Main Thread Initialization</h2>
+<p>Before <code>android_main()</code> is called, the following application state
+is also initialized:</p>
+<ol>
+<li>An I/O thread is spawned that will handle redirecting standard input
+and output to the Android log, visible via <code>logcat</code>.</li>
+<li>A <code>JavaVM</code> and <code>Activity</code> instance will be associated with the <a href="../ndk_context/index.html" title="mod ndk_context"><code>ndk_context</code></a> crate
+so that other, independent, Rust crates are able to find a JavaVM
+for making JNI calls.</li>
+<li>The <code>JavaVM</code> will be attached to the native thread</li>
+<li>A <a href="https://developer.android.com/reference/android/os/Looper">Looper</a> is attached to the Rust native thread.</li>
+</ol>
+<p>These are undone after <code>android_main()</code> returns</p>
+<h2 id="android-extensible-enums"><a class="doc-anchor" href="#android-extensible-enums">§</a>Android Extensible Enums</h2>
+<p>There are numerous enums in the <code>android-activity</code> API which are effectively
+bindings to enums declared in the Android SDK which need to be considered
+<em>runtime</em> extensible.</p>
+<p>Any enum variants that come from the Android SDK may be extended in future
+versions of Android and your code could be exposed to new variants if you
+build an application that might be installed on new versions of Android.</p>
+<p>This crate follows a convention of adding a hidden <code>__Unknown(u32)</code> variant
+to these enum to ensure we can always do lossless conversions between the
+integers from the SDK and our corresponding Rust enums. This can be
+important in case you need to pass certain variants back to the SDK
+regardless of whether you knew about that variants specific semantics at
+compile time.</p>
+<p>You should never include this <code>__Unknown(u32)</code> variant within any exhaustive
+pattern match and should instead treat the enums like <code>#[non_exhaustive]</code>
+enums that require you to add a catch-all for any <code>unknown =&gt; {}</code> values.</p>
+<p>Any code that would exhaustively include the <code>__Unknown(u32)</code> variant when
+pattern matching can not be guaranteed to be forwards compatible with new
+releases of <code>android-activity</code> which may add new Rust variants to these
+enums without requiring a breaking semver bump.</p>
+<p>You can (infallibly) convert these enums to and from primitive <code>u32</code> values
+using <code>.into()</code>:</p>
+<p>For example, here is how you could ensure forwards compatibility with both
+compile-time and runtime extensions of a <code>SomeEnum</code> enum:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">match </span>some_enum {
+    SomeEnum::Foo =&gt; {},
+    SomeEnum::Bar =&gt; {},
+    unhandled =&gt; {
+        <span class="kw">let </span>sdk_val: u32 = unhandled.into();
+        <span class="macro">println!</span>(<span class="string">"Unhandled enum variant {some_enum:?} has SDK value: {sdk_val}"</span>);
+    }
+}</code></pre></div></div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="error/index.html" title="mod android_activity::error">error</a></dt><dt><a class="mod" href="input/index.html" title="mod android_activity::input">input</a></dt></dl><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.AndroidApp.html" title="struct android_activity::AndroidApp">Android<wbr>App</a></dt><dd>The top-level state and interface for a native Rust application</dd><dt><a class="struct" href="struct.AndroidAppWaker.html" title="struct android_activity::AndroidAppWaker">Android<wbr>AppWaker</a></dt><dd>A means to wake up the main thread while it is blocked waiting for I/O</dd><dt><a class="struct" href="struct.ConfigurationRef.html" title="struct android_activity::ConfigurationRef">Configuration<wbr>Ref</a></dt><dd>A (cheaply clonable) reference to this application’s <a href="../ndk/configuration/struct.Configuration.html" title="struct ndk::configuration::Configuration"><code>ndk::configuration::Configuration</code></a></dd><dt><a class="struct" href="struct.Rect.html" title="struct android_activity::Rect">Rect</a></dt><dd>A rectangle with integer edge coordinates. Used to represent window insets, for example.</dd><dt><a class="struct" href="struct.StateLoader.html" title="struct android_activity::StateLoader">State<wbr>Loader</a></dt><dd>An interface for loading application state during <a href="enum.MainEvent.html#variant.Resume" title="variant android_activity::MainEvent::Resume">MainEvent::Resume</a> events</dd><dt><a class="struct" href="struct.StateSaver.html" title="struct android_activity::StateSaver">State<wbr>Saver</a></dt><dd>An interface for saving application state during <a href="enum.MainEvent.html#variant.SaveState" title="variant android_activity::MainEvent::SaveState">MainEvent::SaveState</a> events</dd><dt><a class="struct" href="struct.WindowManagerFlags.html" title="struct android_activity::WindowManagerFlags">Window<wbr>Manager<wbr>Flags</a></dt><dd>Flags for <a href="struct.AndroidApp.html#method.set_window_flags" title="method android_activity::AndroidApp::set_window_flags"><code>AndroidApp::set_window_flags</code></a>
+as per the <a href="https://developer.android.com/reference/android/view/WindowManager.LayoutParams">android.view.WindowManager.LayoutParams Java API</a></dd></dl><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><dl class="item-table"><dt><a class="enum" href="enum.InputStatus.html" title="enum android_activity::InputStatus">Input<wbr>Status</a></dt><dd>Indicates whether an application has handled or ignored an event</dd><dt><a class="enum" href="enum.MainEvent.html" title="enum android_activity::MainEvent">Main<wbr>Event</a></dt><dd>An application event delivered during <a href="struct.AndroidApp.html#method.poll_events" title="method android_activity::AndroidApp::poll_events"><code>AndroidApp::poll_events</code></a></dd><dt><a class="enum" href="enum.PollEvent.html" title="enum android_activity::PollEvent">Poll<wbr>Event</a></dt><dd>An event delivered during <a href="struct.AndroidApp.html#method.poll_events" title="method android_activity::AndroidApp::poll_events"><code>AndroidApp::poll_events</code></a></dd></dl></section></div></main></body></html>
