@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AssetManager","AssetManagerClass","ColorStateList","ColorStateListClass","Configuration","ConfigurationClass","Resources","ResourcesClass","ResourcesTheme","ResourcesThemeClass","TypedArray","TypedArrayClass"],"trait":["StaticAssetManager","StaticColorStateList","StaticConfiguration","StaticResources","StaticResourcesTheme","StaticTypedArray"]};

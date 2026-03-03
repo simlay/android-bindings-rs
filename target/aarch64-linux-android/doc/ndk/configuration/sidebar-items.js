@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Density","HDR","Keyboard","KeysHidden","LayoutDir","NavHidden","Navigation","Orientation","ScreenLong","ScreenRound","ScreenSize","Touchscreen","UiModeNight","UiModeType","WideColorGamut"],"struct":["Configuration","DiffResult"]};
