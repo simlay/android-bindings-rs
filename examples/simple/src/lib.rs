@@ -23,19 +23,13 @@ use android_bindings::{
     JavaLangRunnable,
 };
 */
-use jaffi_support::jni::{
-    objects::JObject,
-    JNIEnv,
-    JavaVM,
-};
+use jaffi_support::jni::{objects::JObject, JNIEnv, JavaVM};
+use ndk::hardware_buffer_format::HardwareBufferFormat;
 use winit::{
     application::ApplicationHandler,
     event_loop::{ActiveEventLoop, EventLoop, EventLoopBuilder},
-    platform::android::{
-        activity::AndroidApp, EventLoopBuilderExtAndroid,
-    },
+    platform::android::{activity::AndroidApp, EventLoopBuilderExtAndroid},
 };
-use ndk::hardware_buffer_format::HardwareBufferFormat;
 
 pub struct App<'a> {
     android_app: AndroidApp,
@@ -46,24 +40,24 @@ impl<'a> App<'a> {
         let android_app = self.android_app.clone();
         let vm = self.env.get_java_vm().expect("Failed to get JavaVM");
 
-        Self::drop_graphics(android_app.clone());
+        // Self::drop_graphics(android_app.clone());
         let runnable = android_bindings::create_runnable(self.env, move || {
             log::debug!("THIS IS RAN ON THE UI THREAD");
             let env = vm.attach_current_thread().expect("Failed to attach thread");
             Self::fix_surface_view(android_app.clone(), *env);
             Self::print_tree(android_app.clone(), *env).expect("Failed to create views");
             //Self::bad_idea_1(android_app.clone(), *env).expect("Failed to create views");
-            Self::create_views_on_ui_thread(android_app.clone(), *env).expect("Failed to create views");
-        }).expect("Failed to build runnable");
+            Self::create_views_on_ui_thread(android_app.clone(), *env)
+                .expect("Failed to create views");
+        })
+        .expect("Failed to build runnable");
         let activity = android_bindings::android::app::NativeActivity::from(unsafe {
             JObject::from_raw(self.android_app.activity_as_ptr().cast())
         });
         let activity = activity.as_activity();
         activity.run_on_ui_thread(self.env, runnable);
     }
-    fn drop_graphics(
-        android_app: AndroidApp,
-    ) {
+    fn drop_graphics(android_app: AndroidApp) {
         if let Some(native_window) = android_app.native_window() {
             unsafe {
                 ndk_sys::ANativeWindow_release(native_window.ptr().as_ptr());
@@ -74,19 +68,16 @@ impl<'a> App<'a> {
         }
     }
 
-    pub fn fix_surface_view(
-        android_app: AndroidApp,
-        env: JNIEnv,
-    ) {
-
+    pub fn fix_surface_view(android_app: AndroidApp, env: JNIEnv) {
         let activity = android_bindings::android::app::NativeActivity::from(android_app.clone());
         let activity = activity.as_activity();
         let content = activity.find_view_by_id(env, android_bindings::ANDROID_R_ID_CONTENT);
 
         let window = activity.get_window(env);
-        window.take_surface(env, android_bindings::android::view::SurfaceHolderCallback2::from(
-                JObject::null()
-        ));
+        //         // window.take_surface(
+        //     env,
+        //     android_bindings::android::view::SurfaceHolderCallback2::from(JObject::null()),
+        // );
         /*
         window.take_input_queue(env, android_bindings::android::view::InputQueueCallback::from(
                 JObject::null(),
@@ -96,10 +87,7 @@ impl<'a> App<'a> {
         window.set_format(env, -3);
     }
 
-    fn print_tree(
-        app: AndroidApp,
-        env: JNIEnv,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    fn print_tree(app: AndroidApp, env: JNIEnv) -> Result<(), Box<dyn std::error::Error>> {
         let activity = android_bindings::android::app::NativeActivity::from(app.clone());
         let activity = activity.as_activity();
         let content = activity.find_view_by_id(env, android_bindings::ANDROID_R_ID_CONTENT);
@@ -110,7 +98,9 @@ impl<'a> App<'a> {
         content.remove_all_views(env);
         for i in 0..content.get_child_count(env) {
             let child = content.get_child_at(env, i);
-            let class = env.find_class("android/view/SurfaceView").expect("Failed to get surface view");
+            let class = env
+                .find_class("android/view/SurfaceView")
+                .expect("Failed to get surface view");
             if let Ok(true) = env.is_instance_of(child, class) {
                 log::debug!("FOUND THE surfaceview!");
             } else {
@@ -120,16 +110,9 @@ impl<'a> App<'a> {
         Ok(())
     }
 
-    fn bad_idea_1(
-        app: AndroidApp,
-        env: JNIEnv,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    fn bad_idea_1(app: AndroidApp, env: JNIEnv) -> Result<(), Box<dyn std::error::Error>> {
         let ctx = ndk_context::android_context();
         let _vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }?;
-
-        let ctx = android_bindings::android::content::Context::from(unsafe {
-            JObject::from_raw(ctx.context().cast())
-        });
         let ctx = android_bindings::android::content::Context::default();
         // This works in java and android studio:
         // https://stackoverflow.com/a/39515370
@@ -147,9 +130,9 @@ impl<'a> App<'a> {
         content.as_view().invalidate(env);
         content.as_view().request_layout(env);
 
-
-        let jchar_seq =
-            android_bindings::java::lang::CharSequence::from(env.new_string("Text View from Rust!")?);
+        let jchar_seq = android_bindings::java::lang::CharSequence::from(
+            env.new_string("Text View from Rust!")?,
+        );
 
         let text_view = android_bindings::android::widget::TextView::new_1android_widget_text_view_landroid_content_context_2(
             env, ctx,
@@ -165,13 +148,12 @@ impl<'a> App<'a> {
 
         Ok(())
     }
-    fn text_view(
-        env: JNIEnv
-    ) -> android_bindings::android::widget::TextView {
+    fn text_view(env: JNIEnv) -> android_bindings::android::widget::TextView {
         let ctx = android_bindings::android::content::Context::default();
 
         let jchar_seq = android_bindings::java::lang::CharSequence::from(
-            env.new_string("Text View from Rust!").expect("Failed to get string")
+            env.new_string("Text View from Rust!")
+                .expect("Failed to get string"),
         );
 
         let text_view = android_bindings::android::widget::TextView::new_1android_widget_text_view_landroid_content_context_2(
@@ -191,10 +173,42 @@ impl<'a> App<'a> {
         text_view.set_text_size_f(env, 48.);
         text_view
     }
-
+    fn create_views_on_ui_thread(
+        app: AndroidApp,
+        env: JNIEnv,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        // Grab the activity (this is the real Android Context)
+        let activity = android_bindings::android::app::NativeActivity::from(app.clone());
+        let activity_obj = activity.as_activity();
+        // Find the existing content view (a FrameLayout that already holds the SurfaceView)
+        let content = activity_obj.find_view_by_id(env, android_bindings::ANDROID_R_ID_CONTENT);
+        let content_group = android_bindings::android::view::ViewGroup::from(*content);
+        // Create a TextView using the activity context
+        let ctx = android_bindings::android::content::Context::default();
+        let text_view = android_bindings::android::widget::TextView::new_1android_widget_text_view_landroid_content_context_2(
+        env,
+        ctx,
+    );
+        text_view.set_text_size_f(env, 48.0);
+        text_view.set_text_color_i(env, 0xFFFF0000u32 as i32);
+        text_view.set_text_keep_state_ljava_lang_char_sequence_2(
+            env,
+            android_bindings::java::lang::CharSequence::from(env.new_string("Hello, Rust!")?),
+        );
+        // Give the TextView layout params
+        let lp = android_bindings::android::view::ViewGroupLayoutParams::new_1android_view_view_group_024layout_params_ii(
+        env,
+        -1, // MATCH_PARENT
+        -1, // MATCH_PARENT
+    );
+        text_view.as_view().set_layout_params(env, lp);
+        // Add the TextView on top of the existing SurfaceView
+        content_group.add_view_landroid_view_view_2(env, text_view.as_view());
+        Ok(())
+    }
 
     /// A minimal example of how to use `ndk_context` to get a `JavaVM` + `Context and make a JNI call
-    fn create_views_on_ui_thread(
+    fn create_views_on_ui_thread_old(
         app: AndroidApp,
         env: JNIEnv,
         //native_window: &ndk::native_window::NativeWindow,
@@ -266,8 +280,7 @@ impl<'a> App<'a> {
 impl ApplicationHandler<()> for App<'_> {
     fn new_events(&mut self, _event_loop: &ActiveEventLoop, cause: winit::event::StartCause) {
         log::debug!("NEW EVENT: {cause:?}");
-        if cause == winit::event::StartCause::Init {
-        }
+        if cause == winit::event::StartCause::Init {}
     }
     fn resumed(&mut self, _event_loop: &ActiveEventLoop) {
         self.create_views();
@@ -284,10 +297,10 @@ impl ApplicationHandler<()> for App<'_> {
         log::debug!("WINDOW EVENT: {:?}", event);
         match event {
             winit::event::WindowEvent::RedrawRequested => {
-             //   self.create_views()
+                //   self.create_views()
             }
             winit::event::WindowEvent::Focused(true) => {
-              //  self.create_views()
+                //  self.create_views()
             }
             _other => {}
         }
@@ -323,17 +336,23 @@ fn android_main(android_app: AndroidApp) {
 
 fn clear_sufrace(android_app: AndroidApp) {
     if let Some(native_window) = android_app.native_window() {
-        native_window.set_buffers_geometry(
-            0, 0,
-            Some(HardwareBufferFormat::R8G8B8A8_UNORM),
-        ).expect("Failed to set buffers geometry");
-        let mut guard = native_window.lock(None).expect("Failed to get lock on window");
+        native_window
+            .set_buffers_geometry(0, 0, Some(HardwareBufferFormat::R8G8B8A8_UNORM))
+            .expect("Failed to set buffers geometry");
+        let mut guard = native_window
+            .lock(None)
+            .expect("Failed to get lock on window");
         // Get buffer info
         let width = guard.width() as usize;
         let height = guard.height() as usize;
         let stride = guard.stride() as usize;
 
-        log::debug!("CLEAR SURFACE: Buffer: {}x{}, stride: {}", width, height, stride);
+        log::debug!(
+            "CLEAR SURFACE: Buffer: {}x{}, stride: {}",
+            width,
+            height,
+            stride
+        );
         if let Some(bytes) = guard.bytes() {
             bytes.fill(std::mem::MaybeUninit::new(0u8));
         }
