@@ -12,7 +12,7 @@ edition = "2024"
 
 [build-dependencies]
 jaffi = { version = "0.2.0" }
-zip = "8.2.0"
+zip = "8.3.1"
 javac = "0.1"
 android-build = "0.1.3"
 
