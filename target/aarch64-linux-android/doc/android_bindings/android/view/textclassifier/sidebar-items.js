@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["TextClassifier","TextClassifierClass"],"trait":["StaticTextClassifier"]};
