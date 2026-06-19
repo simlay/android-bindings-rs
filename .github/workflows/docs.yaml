@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: write # 'write' access to repository contents
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install Rust Nightly
         uses: dtolnay/rust-toolchain@stable
         with:
