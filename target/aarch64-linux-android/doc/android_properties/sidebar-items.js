@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["getprop","prop_values","setprop"],"mod":["android"],"struct":["AndroidProperty"]};

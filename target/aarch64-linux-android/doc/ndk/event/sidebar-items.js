@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Axis","InputEvent","KeyAction","Keycode","MotionAction","Source","ToolType"],"struct":["ButtonState","EdgeFlags","HistoricalMotionEvent","HistoricalMotionEventsIter","HistoricalPointer","HistoricalPointersIter","KeyEvent","KeyEventFlags","MetaState","MotionEvent","MotionEventFlags","Pointer","PointersIter","SourceClass"]};

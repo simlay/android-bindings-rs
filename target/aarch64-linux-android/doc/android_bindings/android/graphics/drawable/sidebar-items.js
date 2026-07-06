@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ColorDrawable","ColorDrawableClass","Drawable","DrawableCallback","DrawableCallbackClass","DrawableClass","DrawableConstantState","DrawableConstantStateClass"],"trait":["StaticColorDrawable","StaticDrawable","StaticDrawableCallback","StaticDrawableConstantState"]};
