@@ -11,7 +11,7 @@ default = []
 example_exit = []
 
 [target.'cfg(target_os = "android")'.dependencies]
-jaffi_support = { version = "0.2.0" }
+jni = { version = "0.22", features = ["invocation"] }
 log = "0.4.14"
 ndk-context = "0.1.1"
 ndk = { version = "0.9", features = ["nativewindow"] }

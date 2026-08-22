@@ -1,6 +1,7 @@
 [workspace]
 members = [
-    "examples/simple"
+    "examples/simple",
+    "examples/gradle"
 ]
 resolver = "2"
 
@@ -11,19 +12,15 @@ edition = "2024"
 
 
 [build-dependencies]
-jaffi = { version = "0.2.0" }
-zip = "8.6.0"
+jbindgen = "0.1.0"
 javac = "0.1"
-android-build = "0.1.3"
 
 [target.'cfg(target_os = "android")'.dependencies]
-jaffi_support = { version = "0.2.0" }
+jni = { version = "0.22", features = ["invocation"] }
+jni-macros = "0.22"
 android-activity = { version = "0.6", features = ["native-activity"] }
 ndk-context = "0.1.1"
-
+jbindgen-annotations = "0.1.0"
 
 [patch.crates-io]
-jaffi         = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }
-jaffi_support = { git = "https://github.com/simlay/jaffi.git", branch = "android-bindings" }
-#jaffi =         { path = "../jaffi/" }
-#jaffi_support = { path = "../jaffi/jaffi_support/" }
+jbindgen = { path = "../jbindgen/jbindgen/" }
