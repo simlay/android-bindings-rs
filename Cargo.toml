@@ -14,6 +14,7 @@ edition = "2024"
 [build-dependencies]
 jbindgen = "0.1.0"
 javac = "0.1"
+android-build = "0.1.0"
 
 [target.'cfg(target_os = "android")'.dependencies]
 jni = { version = "0.22", features = ["invocation"] }

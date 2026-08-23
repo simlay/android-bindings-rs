@@ -2,36 +2,59 @@ use jbindgen::Builder;
 use std::fs;
 use std::path::PathBuf;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let out_dir = std::env::var("OUT_DIR")?;
-    let bindings_path = PathBuf::from(&out_dir).join("generated_jaffi.rs");
+static DEFAULT_API_LEVEL: u32 = 35;
 
-    // Compile Java NativeRunnable to class file
-    let java_src_dir = PathBuf::from("java");
-    let javac_out_dir = PathBuf::from(&out_dir).join("javac-build/classes");
-    fs::create_dir_all(&javac_out_dir)?;
+fn build_dex() {
+    let out_dir = std::env::var("OUT_DIR").unwrap();
+
+    let api_level = std::env::var("ANDROID_API_LEVEL")
+        .map(|v| v.parse::<u32>().unwrap_or(DEFAULT_API_LEVEL))
+        .unwrap_or(DEFAULT_API_LEVEL);
 
     // Get Android SDK jar for compilation
     let android_home = std::env::var("ANDROID_HOME")
         .or_else(|_| std::env::var("ANDROID_SDK_ROOT"))
         .expect("ANDROID_HOME or ANDROID_SDK_ROOT not set");
-
-    let api_level = std::env::var("ANDROID_API_LEVEL")
-        .map(|v| v.parse::<u32>().unwrap_or(35))
-        .unwrap_or(35);
-
     let android_jar = PathBuf::from(&android_home)
         .join("platforms")
         .join(format!("android-{}", api_level))
         .join("android.jar");
 
+
+    // Compile Java NativeRunnable to class file
+    let java_src_dir = PathBuf::from("java");
+    let javac_out_dir = PathBuf::from(&out_dir).join("javac-build/classes");
+    fs::create_dir_all(&javac_out_dir).expect("Failed to create build directory");
+
     // Compile NativeRunnable.java using javac crate
-    javac::Build::new()
+    let compiled_files = javac::Build::new()
         .source_dir(&java_src_dir)
         .output_dir(&javac_out_dir)
-        .release("11")
+        .release("21")
         .classpath(&android_jar)
         .compile();
+
+
+    // DEX the .class → classes.dex
+    android_build::Dexer::new()
+        .out_dir(std::path::PathBuf::from(&out_dir))
+        .files(compiled_files)
+        .run()
+        .expect("d8 failed");
+
+    // Tell cargo to re-run if the java source changes
+    println!("cargo:rerun-if-changed=java/com/example/NativeRunnable.java");
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let out_dir = std::env::var("OUT_DIR")?;
+
+    build_dex();
+
+    let api_level = std::env::var("ANDROID_API_LEVEL")
+        .map(|v| v.parse::<u32>().unwrap_or(DEFAULT_API_LEVEL))
+        .unwrap_or(DEFAULT_API_LEVEL);
+
 
     // Generate bindings using jbindgen
     // Exclude core Java types that are automatically mapped by the jni crate

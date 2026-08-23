@@ -5,62 +5,60 @@ use winit::{
     platform::android::{activity::AndroidApp, EventLoopBuilderExtAndroid},
 };
 
-pub struct App {
+pub struct App<'a> {
     android_app: AndroidApp,
-    env_ptr: *mut jni::sys::JNIEnv,
+    env: EnvUnowned<'a>,
 }
 
-impl App {
+impl<'a> App<'a> {
     fn create_views(&mut self) {
-        unsafe {
-            let mut env_unowned = EnvUnowned::from_raw(self.env_ptr);
-            let android_app = self.android_app.clone();
+        println!("CREATING VIEWS");
+        //let mut env_unowned = unsafe {EnvUnowned::from_raw(self.env_ptr) };
+        let android_app = self.android_app.clone();
 
-            // Initialize bindings within env scope
-            let init_outcome = env_unowned.with_env(move |env| {
-                let loader = jni::refs::LoaderContext::default();
-                android_bindings::bindings::jni_init(env, &loader)
-            });
-            match init_outcome.into_outcome() {
-                jni::Outcome::Ok(_) => {}
-                jni::Outcome::Err(e) => log::error!("Failed to initialize bindings: {:?}", e),
-                jni::Outcome::Panic(_) => log::error!("Panic during bindings initialization"),
-            }
+        // Initialize bindings within env scope
+        let init_outcome = self.env.with_env(move |env| {
+            let loader = jni::refs::LoaderContext::default();
+            android_bindings::bindings::jni_init(env, &loader)
+        }).into_outcome();;
 
-            // Get JavaVM for creating runnable
-            let _vm_outcome = env_unowned.with_env(|env| env.get_java_vm());
-            let _vm = match _vm_outcome.into_outcome() {
-                jni::Outcome::Ok(vm) => vm,
-                jni::Outcome::Err(e) => {
-                    log::error!("Failed to get JavaVM: {:?}", e);
-                    return;
-                }
-                jni::Outcome::Panic(_) => {
-                    log::error!("Panic getting JavaVM");
-                    return;
-                }
-            };
+        println!("ran JNI_INIT");
+        // Get JavaVM for creating runnable
+        let vm = self.env.with_env(|env| env.get_java_vm()).into_outcome();
+        let vm = if let jni::Outcome::Ok(vm) = vm { vm } else { return; };
 
-            // Create a simple Runnable placeholder
-            let _runnable = android_bindings::bindings::java::lang::Runnable::default();
+        println!("GOT THE VM");
+        /*
+        */
 
-            // Create NativeActivity from the android_app pointer
-            let activity_ptr = android_app.activity_as_ptr();
-            let _activity_outcome = env_unowned.with_env::<_, (), jni::errors::Error>(move |env| {
-                let _activity = android_bindings::bindings::android::app::NativeActivity::from_raw(
-                    env,
-                    activity_ptr.cast(),
-                );
-                // NativeActivity extends Activity, use as_activity() to cast
-                // let activity: android_bindings::bindings::android::app::Activity = _activity.as_activity();
-                // Ok(activity)
-                Ok(())
-            });
-            let _ = _activity_outcome.into_outcome();
+        // Create a simple Runnable placeholder
+        //let _runnable = android_bindings::bindings::java::lang::Runnable::default();
 
-            // Run on UI thread
-            let _ = _runnable;
-        }
+
+
+        // Create NativeActivity from the android_app pointer
+        let activity_ptr = android_app.activity_as_ptr();
+        let activity = self.env.with_env::<_, android_bindings::bindings::android::app::Activity, jni::errors::Error>(move |env| {
+            let activity = unsafe {android_bindings::bindings::android::app::Activity::from_raw(
+                env,
+                activity_ptr.cast(),
+            )};
+            // NativeActivity extends Activity, use as_activity() to cast
+            // let activity: android_bindings::bindings::android::app::Activity = _activity.as_activity();
+            Ok(activity)
+        }).into_outcome();
+        let activity = if let jni::Outcome::Ok(activity) = activity { activity } else { return ;};
+        println!("CREATED THE ACTIVITY");
+
+        let runnable = self.env.with_env(|env| android_bindings::create_runnable(env, move || { println!("RUN ON MAIN THREAD");})).into_outcome();
+        let runnable = if let jni::Outcome::Ok(runnable) = runnable { runnable } else { return };
+        println!("CREATED THE RUNNABLE");
+        self.env.with_env(move |env| activity.run_on_ui_thread(env, runnable)).into_outcome();
+
+
+
+        // Run on UI thread
+        //let _ = _runnable;
     }
 
     #[allow(dead_code)]
@@ -107,7 +105,7 @@ impl App {
     }
 }
 
-impl ApplicationHandler<()> for App {
+impl ApplicationHandler<()> for App<'_> {
     fn new_events(&mut self, _event_loop: &ActiveEventLoop, cause: winit::event::StartCause) {
         log::debug!("NEW EVENT: {cause:?}");
         if cause == winit::event::StartCause::Init {}
@@ -157,8 +155,9 @@ fn android_main(android_app: AndroidApp) {
             Ok::<_, jni::errors::Error>((*env).get_raw())
         })
         .expect("Failed to get env from vm");
+    let env_unowned = unsafe {EnvUnowned::from_raw(env_ptr) };
 
-    let mut winit_app = App { android_app, env_ptr };
+    let mut winit_app = App { android_app, env: env_unowned };
     let _ = event_loop.run_app(&mut winit_app).expect("Fail to run app");
     log::debug!(
         "Android_main: {}",

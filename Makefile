@@ -1,9 +1,14 @@
 
 LLVM_PATH=/Users/simlay/Library/Android/sdk/ndk/29.0.14206865/toolchains/llvm/prebuilt/darwin-x86_64/bin
-
+#TARGET=aarch64-linux-android
+TARGET=armv7-linux-androideabi
 
 run-device:
-	cargo apk run --target aarch64-linux-android  -p simple --no-logcat
+	cargo apk run --target $(TARGET)  -p simple
+
+# This doesn't work.
+debug-device:
+	cargo apk gdb --target $(TARGET)  -p simple
 
 xbuild:
 	PATH=$(LLVM_PATH):${PATH} JAVA_HOME=/opt/homebrew/opt/openjdk/ x build --device 'adb:pixel-xl.house.simlay.net:5555' --arch arm64 -p simple -v
@@ -28,6 +33,11 @@ watch:
 
 scrcpy:
 	scrcpy --video-codec=h265 --max-size=1920 --max-fps=60 --no-audio --keyboard=uhid
+
+ui-automator:
+	adb shell uiautomator dump
+	adb pull /sdcard/window_dump.xml
+	cat window_dump.xml | yq -ox -p xml
 
 screenshot: run-device
 	sleep 2
