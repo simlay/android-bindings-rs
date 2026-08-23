@@ -2,7 +2,7 @@
 pub const ANDROID_R_ID_CONTENT: i32 = 16908290;
 pub const ANDROID_R_COLOR_TRANSPARENT: i32 = 17170445;
 
-use jni::objects::{JClass, JValue, JObject};
+use jni::objects::{JClass, JValue};
 use jni::strings::JNIStr;
 use jni::sys::jlong;
 use jni::Env;
@@ -32,7 +32,8 @@ where
     let class = load_native_runnable_class(env)?;
     println!("LOADED NATIVE CLASS");
     // This is probably wrong.
-    let obj = env.new_object(class, jni_sig!((a: void) -> void), &[JValue::Long(ptr)])?;
+    let obj = env.new_object(class, jni_sig!((jlong) -> void), &[JValue::Long(ptr)]).expect("Failed to create new object for native runnable");
+    println!("Created new jobject for runnable");
     let runnable = unsafe { bindings::java::lang::Runnable::from_raw(env, *obj) };
     Ok(runnable)
 }
@@ -46,6 +47,7 @@ pub extern "system" fn Java_com_example_NativeRunnable_nativeRun(
 ) {
     let _ = catch_unwind(|| {
         if ptr != 0 {
+            println!("NativeRunnable::nativeRun called with ptr={}", ptr);
             let closure = unsafe { &mut *(ptr as *mut RunnableClosure) };
             closure();
         }
@@ -82,20 +84,20 @@ pub fn load_native_runnable_class<'local>(
         Ok(unsafe { JClass::from_raw(env, raw_ptr) })
     } else {
         println!("FINDING THE CLASS IN NATIVE RUNNABLE");
-        let byte_array = unsafe { jni::objects::JObject::from_raw(env, env.byte_array_from_slice(DEX_BYTES).unwrap().into_raw()) };
+        let byte_array_raw = env.byte_array_from_slice(DEX_BYTES).unwrap().into_raw();
+        let byte_array = unsafe { jni::objects::JObject::from_raw(env, byte_array_raw) };
 
-        let class_name = jni_str!("com/example/NativeRunnable");
-        let class = env.find_class(class_name).expect("Failed to get NativeRunable class");
-
+        let byte_buffer_class = env.find_class(jni_str!("java/nio/ByteBuffer")).expect("Failed to get ByteBuffer");
         let byte_buffer = env.call_static_method(
-            env.find_class(jni_str!("java/nio/ByteBuffer")).expect("Failed to get ByteBuffer"),
+            byte_buffer_class,
             jni_str!("wrap"),
             jni_sig!(([byte]) -> java.nio.ByteBuffer),// "([B)Ljava/nio/ByteBuffer;",
             &[JValue::Object(&byte_array)],
         ).unwrap().l().unwrap();
 
+        let class_loader_class = env.find_class(jni_str!("dalvik/system/InMemoryDexClassLoader")).expect("Failed to get InMemoryDexClassLoader");
         let dex_loader = env.new_object(
-            env.find_class(jni_str!("dalvik/system/InMemoryDexClassLoader")).expect("Failed to get InMemoryDexClassLoader"),
+            class_loader_class,
             jni_sig!((java.nio.ByteBuffer, java.lang.ClassLoader) -> void), //"(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V",
             &[
             JValue::Object(&byte_buffer),
@@ -104,13 +106,14 @@ pub fn load_native_runnable_class<'local>(
         ).unwrap();
         // For now, we need to compile the NativeRunnable.java to a class file
         // and include it. Let's create a simple approach using the jni crate.
+        let class_name_jstring = env.new_string("com/example/NativeRunnable").expect("Failed to create class name string");
         let loaded = env.call_method(
             dex_loader,
             jni_str!("loadClass"),
             jni_sig!((java.lang.String) -> java.lang.Class), //"(Ljava/lang/String;)Ljava/lang/Class;",
-            &[JValue::Object(&JObject::from_raw(env, class.get_name(env).expect("Failed to get name").into_raw()))],
+            &[JValue::Object(&class_name_jstring)],
         ).unwrap().l().unwrap();
-        let class = unsafe {jni::objects::JClass::from_raw(env, loaded.as_raw()) };
+        let class = unsafe { jni::objects::JClass::from_raw(env, loaded.as_raw()) };
         println!("GOT CLASS IN NATIVE RUNNABLE");
 
         unsafe {
@@ -124,7 +127,7 @@ pub fn load_native_runnable_class<'local>(
                     Java_com_example_NativeRunnable_nativeRun as *mut std::ffi::c_void,
                 ),
                 jni::NativeMethod::from_raw_parts(
-                    JNIStr::from_cstr(c"nativeRun").expect("Failed to get jnistr"),
+                    JNIStr::from_cstr(c"nativeDrop").expect("Failed to get jnistr"),
                     JNIStr::from_cstr(c"(J)V").expect("Failed to get JNIStr"),
                     Java_com_example_NativeRunnable_nativeDrop as *mut std::ffi::c_void,
                 ),
@@ -132,7 +135,7 @@ pub fn load_native_runnable_class<'local>(
             ).expect("Failed to register native methonds for NativeRunnable");
         }
 
-        let global = env.new_global_ref(&class).expect("Failed to get global ref for native runnable");;
+        let global = env.new_global_ref(&class).expect("Failed to get global ref for native runnable");
         NATIVE_RUNNABLE_CLASS.set(global).ok();
         Ok(class)
     }

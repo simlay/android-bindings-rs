@@ -2,7 +2,7 @@ use jbindgen::Builder;
 use std::fs;
 use std::path::PathBuf;
 
-static DEFAULT_API_LEVEL: u32 = 35;
+static DEFAULT_API_LEVEL: u32 = 31;
 
 fn build_dex() {
     let out_dir = std::env::var("OUT_DIR").unwrap();

@@ -28,8 +28,6 @@ impl<'a> App<'a> {
         let vm = if let jni::Outcome::Ok(vm) = vm { vm } else { return; };
 
         println!("GOT THE VM");
-        /*
-        */
 
         // Create a simple Runnable placeholder
         //let _runnable = android_bindings::bindings::java::lang::Runnable::default();
@@ -50,10 +48,13 @@ impl<'a> App<'a> {
         let activity = if let jni::Outcome::Ok(activity) = activity { activity } else { return ;};
         println!("CREATED THE ACTIVITY");
 
-        let runnable = self.env.with_env(|env| android_bindings::create_runnable(env, move || { println!("RUN ON MAIN THREAD");})).into_outcome();
+        let runnable = self.env.with_env(|env| android_bindings::create_runnable(env, move || { println!("RUN ON UI THREAD");})).into_outcome();
         let runnable = if let jni::Outcome::Ok(runnable) = runnable { runnable } else { return };
         println!("CREATED THE RUNNABLE");
-        self.env.with_env(move |env| activity.run_on_ui_thread(env, runnable)).into_outcome();
+        let out = self.env.with_env(move |env| activity.run_on_ui_thread(env, runnable)).into_outcome();
+        println!("RUN ON MAIN THREAD: {out:#?}");
+        if let jni::Outcome::Ok(_) = out { } else {panic!("Did not run on the ui thread") };
+
 
 
 
