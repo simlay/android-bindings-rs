@@ -4,7 +4,7 @@ LLVM_PATH=/Users/simlay/Library/Android/sdk/ndk/29.0.14206865/toolchains/llvm/pr
 TARGET=armv7-linux-androideabi
 
 run-device:
-	cargo apk run --target $(TARGET)  -p simple
+	cargo apk run --target $(TARGET)  -p simple --no-logcat
 
 # This doesn't work.
 debug-device:

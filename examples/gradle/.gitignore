@@ -1,0 +1,17 @@
+# Gradle
+.gradle/
+build/
+app/.gradle/
+app/build/
+
+# Built native libraries (.so)
+app/src/main/jniLibs/
+
+# IDE (Eclipse / IntelliJ)
+/.idea/
+*.iml
+.project
+.settings/
+
+# Screenshots
+*.png

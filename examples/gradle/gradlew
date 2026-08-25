@@ -1,0 +1,15 @@
+#!/bin/bash
+# Gradle wrapper script - simplified version
+# In production, you should use the official gradlew from https://gradle.org/release-checksums/
+
+GRADLE_USER_HOME="${GRADLE_USER_HOME:-$HOME/.gradle}"
+GRADLE_OPTS="${GRADLE_OPTS:-}"
+
+# Find gradle command
+if command -v gradle &> /dev/null; then
+    exec gradle "$@"
+else
+    echo "Error: Gradle not found. Please install Gradle or use the official wrapper."
+    echo "Download from: https://gradle.org/releases/"
+    exit 1
+fi
