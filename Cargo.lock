@@ -86,9 +86,10 @@ dependencies = [
  "android-build",
  "javac",
  "jbindgen",
- "jbindgen-annotations 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "jbindgen-annotations",
  "jni 0.22.4",
  "jni-macros",
+ "log",
  "ndk-context",
 ]
 
@@ -790,21 +791,19 @@ dependencies = [
 [[package]]
 name = "jbindgen"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0d9ac0800066705cc628c02173ece6e9f99bb7cc0e612d8a0b1cff6bff494fb"
 dependencies = [
  "cafebabe",
  "clap",
  "javac",
- "jbindgen-annotations 0.1.0",
+ "jbindgen-annotations",
  "jni 0.22.4",
  "log",
  "pretty_env_logger",
  "thiserror 2.0.18",
  "zip",
 ]
-
-[[package]]
-name = "jbindgen-annotations"
-version = "0.1.0"
 
 [[package]]
 name = "jbindgen-annotations"

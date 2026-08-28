@@ -23,10 +23,10 @@ uninstall:
 	adb uninstall com.simlay.example
 
 logs-recent:
-	adb logcat RustStdoutStderr:V 'com.simlay.example:V' simple:V 'com.simlay.example' '*:S' -n 1000
+	adb logcat -d -m 20 'RustStdoutStderr:V' 'android_bindings:V' 'android_activity:V' 'com.simlay.example:V' 'simple:V com.simlay.example' '*:S'
 
 logs-follow:
-	adb logcat RustStdoutStderr:V 'com.simlay.example:V' simple:V 'com.simlay.example' '*:S'
+	adb logcat RustStdoutStderr:V 'android_activity:V' 'com.simlay.example:V' simple:V 'com.simlay.example' '*:S'
 
 watch:
 	cargo watch -s 'make run-device' -w build.rs -w src/ -w Cargo.toml -w examples/ -w java/

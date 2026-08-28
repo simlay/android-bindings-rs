@@ -12,7 +12,7 @@ pub struct App<'a> {
 
 impl<'a> App<'a> {
     fn create_views(&mut self) {
-        println!("CREATING VIEWS");
+        log::info!("CREATING VIEWS");
         //let mut env_unowned = unsafe {EnvUnowned::from_raw(self.env_ptr) };
         let android_app = self.android_app.clone();
 
@@ -22,12 +22,12 @@ impl<'a> App<'a> {
             android_bindings::bindings::jni_init(env, &loader)
         }).into_outcome();;
 
-        println!("ran JNI_INIT");
+        log::info!("ran JNI_INIT");
         // Get JavaVM for creating runnable
         let vm = self.env.with_env(|env| env.get_java_vm()).into_outcome();
         let vm = if let jni::Outcome::Ok(vm) = vm { vm } else { return; };
 
-        println!("GOT THE VM");
+        log::info!("GOT THE VM");
 
         // Create a simple Runnable placeholder
         //let _runnable = android_bindings::bindings::java::lang::Runnable::default();
@@ -46,13 +46,13 @@ impl<'a> App<'a> {
             Ok(activity)
         }).into_outcome();
         let activity = if let jni::Outcome::Ok(activity) = activity { activity } else { return ;};
-        println!("CREATED THE ACTIVITY");
+        log::info!("CREATED THE ACTIVITY");
 
-        let runnable = self.env.with_env(|env| android_bindings::create_runnable(env, move || { println!("RUN ON UI THREAD");})).into_outcome();
+        let runnable = self.env.with_env(|env| android_bindings::create_runnable(env, move || { log::info!("RUN ON UI THREAD");})).into_outcome();
         let runnable = if let jni::Outcome::Ok(runnable) = runnable { runnable } else { return };
-        println!("CREATED THE RUNNABLE");
+        log::info!("CREATED THE RUNNABLE");
         let out = self.env.with_env(move |env| activity.run_on_ui_thread(env, runnable)).into_outcome();
-        println!("RUN ON MAIN THREAD: {out:#?}");
+        log::info!("RUN ON MAIN THREAD: {out:#?}");
         if let jni::Outcome::Ok(_) = out { } else {panic!("Did not run on the ui thread") };
 
 
@@ -109,7 +109,9 @@ impl<'a> App<'a> {
 impl ApplicationHandler<()> for App<'_> {
     fn new_events(&mut self, _event_loop: &ActiveEventLoop, cause: winit::event::StartCause) {
         log::debug!("NEW EVENT: {cause:?}");
-        if cause == winit::event::StartCause::Init {}
+        if cause == winit::event::StartCause::Init {
+            self.create_views();
+        }
     }
 
     fn resumed(&mut self, _event_loop: &ActiveEventLoop) {

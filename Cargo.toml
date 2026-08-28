@@ -22,6 +22,7 @@ jni-macros = "0.22"
 android-activity = { version = "0.6", features = ["native-activity"] }
 ndk-context = "0.1.1"
 jbindgen-annotations = "0.1.0"
+log = "0.4"
 
-[patch.crates-io]
-jbindgen = { path = "../jbindgen/jbindgen/" }
+#[patch.crates-io]
+#jbindgen = { path = "../jbindgen/jbindgen/" }

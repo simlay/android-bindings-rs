@@ -5,7 +5,7 @@ pub const ANDROID_R_COLOR_TRANSPARENT: i32 = 17170445;
 use jni::objects::{JClass, JValue};
 use jni::strings::JNIStr;
 use jni::sys::jlong;
-use jni::Env;
+use jni::{Env, EnvUnowned};
 use std::panic::catch_unwind;
 use std::sync::OnceLock;
 use jni_macros::{
@@ -28,12 +28,11 @@ where
     let ptr = Box::into_raw(Box::new(boxed)) as jlong;
 
     // Find NativeRunnable class and create instance
-    println!("LOADING NATIVE CLASS");
+    log::info!("LOADING NATIVE CLASS");
     let class = load_native_runnable_class(env)?;
-    println!("LOADED NATIVE CLASS");
-    // This is probably wrong.
+    log::info!("LOADED NATIVE CLASS");
     let obj = env.new_object(class, jni_sig!((jlong) -> void), &[JValue::Long(ptr)]).expect("Failed to create new object for native runnable");
-    println!("Created new jobject for runnable");
+    log::info!("Created new jobject for runnable");
     let runnable = unsafe { bindings::java::lang::Runnable::from_raw(env, *obj) };
     Ok(runnable)
 }
@@ -41,13 +40,12 @@ where
 /// Native method called when Runnable.run() is invoked
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_com_example_NativeRunnable_nativeRun(
-    _env: Env,
-    _class: JClass,
+    _env: EnvUnowned,
+    _class: jni::sys::jclass,
     ptr: jlong,
 ) {
     let _ = catch_unwind(|| {
         if ptr != 0 {
-            println!("NativeRunnable::nativeRun called with ptr={}", ptr);
             let closure = unsafe { &mut *(ptr as *mut RunnableClosure) };
             closure();
         }
@@ -57,8 +55,8 @@ pub extern "system" fn Java_com_example_NativeRunnable_nativeRun(
 /// Native method to drop/free the closure when no longer needed
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_com_example_NativeRunnable_nativeDrop(
-    _env: Env,
-    _class: JClass,
+    _env: EnvUnowned,
+    _class: jni::sys::jclass,
     ptr: jlong,
 ) {
     if ptr != 0 {
@@ -83,7 +81,7 @@ pub fn load_native_runnable_class<'local>(
         let raw_ptr = class_ref.as_raw();
         Ok(unsafe { JClass::from_raw(env, raw_ptr) })
     } else {
-        println!("FINDING THE CLASS IN NATIVE RUNNABLE");
+        log::info!("FINDING THE CLASS IN NATIVE RUNNABLE");
         let byte_array_raw = env.byte_array_from_slice(DEX_BYTES).unwrap().into_raw();
         let byte_array = unsafe { jni::objects::JObject::from_raw(env, byte_array_raw) };
 
@@ -114,7 +112,7 @@ pub fn load_native_runnable_class<'local>(
             &[JValue::Object(&class_name_jstring)],
         ).unwrap().l().unwrap();
         let class = unsafe { jni::objects::JClass::from_raw(env, loaded.as_raw()) };
-        println!("GOT CLASS IN NATIVE RUNNABLE");
+        log::info!("GOT CLASS IN NATIVE RUNNABLE");
 
         unsafe {
             // Register native methods explicitly so JNI can find them
