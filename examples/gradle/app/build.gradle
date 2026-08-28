@@ -1,0 +1,77 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.simlay.gradle'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.simlay.gradle"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+}
+
+tasks.register('buildRust', Exec) {
+    workingDir rootDir
+    executable 'cargo'
+    args('ndk', 'build', '--target', 'arm64-v8a', '--release')
+    
+    environment 'ANDROID_HOME', '/Users/simlay/Library/Android/sdk'
+    environment 'ANDROID_JAR', '/Users/simlay/Library/Android/sdk/platforms/android-35/android.jar'
+    
+    doFirst {
+        println "Building Rust library with cargo-ndk..."
+        println "ANDROID_HOME: ${System.getenv('ANDROID_HOME')}"
+        println "ANDROID_JAR: ${System.getenv('ANDROID_JAR')}"
+    }
+    
+    doLast {
+        println "Rust library built successfully!"
+    }
+}
+
+task copyRustLib(type: Copy) {
+    from "/Users/simlay/projects/rust-mobile/android-bindings-rs/target/aarch64-linux-android/release/libgradle.so"
+    into "src/main/jniLibs/arm64-v8a"
+    doFirst {
+        println "Copying libgradle.so to jniLibs"
+    }
+}
+
+preBuild.dependsOn buildRust
+preBuild.dependsOn copyRustLib

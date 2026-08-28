@@ -1,191 +1,148 @@
-use std::{
-    borrow::Cow,
-    error::Error,
-    io::Write,
-    path::{Path, PathBuf},
-    process::Command,
-};
-
-use jaffi::Jaffi;
+use jbindgen::Builder;
 use std::fs;
-use std::io;
+use std::path::PathBuf;
 
-fn extract_jar(file: PathBuf) {
-    let file = fs::File::open(file).unwrap();
-    let mut archive = zip::ZipArchive::new(file).unwrap();
-    //let output_dir = PathBuf::from(std::env::var("CARGO_TARGET_DIR").unwrap()).join("android-src");
-    let output_dir = PathBuf::from("./target").join("android-src");
+static DEFAULT_API_LEVEL: u32 = 31;
 
-    for i in 0..archive.len() {
-        let mut file = archive.by_index(i).unwrap();
-        let outpath = match file.enclosed_name() {
-            Some(path) => output_dir.join(path),
-            None => continue,
-        };
-
-        {
-            let comment = file.comment();
-            if !comment.is_empty() {
-                println!("File {i} comment: {comment}");
-            }
-        }
-
-        if file.is_dir() {
-            println!("File {} extracted to \"{}\"", i, outpath.display());
-            fs::create_dir_all(&outpath).unwrap();
-        } else {
-            println!(
-                "File {} extracted to \"{}\" ({} bytes)",
-                i,
-                outpath.display(),
-                file.size()
-            );
-            if let Some(p) = outpath.parent() {
-                if !p.exists() {
-                    fs::create_dir_all(p).unwrap();
-                }
-            }
-            let mut outfile = fs::File::create(&outpath).unwrap();
-            io::copy(&mut file, &mut outfile).unwrap();
-        }
-    }
-}
-
-fn class_path(jar: Option<String>) -> PathBuf {
-
-    let android_jar = if let Some(jar) = jar {
-        PathBuf::from(jar)
-    } else {
-        let android_home =
-            PathBuf::from(std::env::var("ANDROID_HOME").expect("ANDROID_HOME not set"));
-        android_home.join("platforms/android-35/android.jar")
-    };
-    if !std::path::Path::new("./target/android-src/").exists() {
-        extract_jar(android_jar);
-    }
-    PathBuf::from("target/android-src/")
-}
 fn build_dex() {
-        let out_dir = std::env::var("OUT_DIR").unwrap();
-        let android_jar_path = android_build::android_jar(None)
-            .expect("Failed to find android.jar");
+    let out_dir = std::env::var("OUT_DIR").unwrap();
 
-        // Compile Java → .class
-        android_build::JavaBuild::new()
-            .class_path(&android_jar_path)
-            .classes_out_dir(std::path::PathBuf::from(&out_dir))
-            .file("java/com/example/NativeRunnable.java")
-            .compile()
-            .expect("javac failed");
+    let api_level = std::env::var("ANDROID_API_LEVEL")
+        .map(|v| v.parse::<u32>().unwrap_or(DEFAULT_API_LEVEL))
+        .unwrap_or(DEFAULT_API_LEVEL);
 
-        // DEX the .class → classes.dex
-        android_build::Dexer::new()
-            .out_dir(std::path::PathBuf::from(&out_dir))
-            .file(
-                std::path::PathBuf::from(&out_dir)
-                    .join("com/example/NativeRunnable.class")
-            )
-            .run()
-            .expect("d8 failed");
+    // Get Android SDK jar for compilation
+    let android_home = std::env::var("ANDROID_HOME")
+        .or_else(|_| std::env::var("ANDROID_SDK_ROOT"))
+        .expect("ANDROID_HOME or ANDROID_SDK_ROOT not set");
+    let android_jar = PathBuf::from(&android_home)
+        .join("platforms")
+        .join(format!("android-{}", api_level))
+        .join("android.jar");
 
-        // Tell cargo to re-run if the java source changes
-        println!("cargo:rerun-if-changed=java/com/example/NativeRunnable.java");
+
+    // Compile Java NativeRunnable to class file
+    let java_src_dir = PathBuf::from("java");
+    let javac_out_dir = PathBuf::from(&out_dir).join("javac-build/classes");
+    fs::create_dir_all(&javac_out_dir).expect("Failed to create build directory");
+
+    // Compile NativeRunnable.java using javac crate
+    let compiled_files = javac::Build::new()
+        .source_dir(&java_src_dir)
+        .output_dir(&javac_out_dir)
+        .release("21")
+        .classpath(&android_jar)
+        .compile();
+
+
+    // DEX the .class → classes.dex
+    android_build::Dexer::new()
+        .out_dir(std::path::PathBuf::from(&out_dir))
+        .files(compiled_files)
+        .run()
+        .expect("d8 failed");
+
+    // Tell cargo to re-run if the java source changes
+    println!("cargo:rerun-if-changed=java/com/example/NativeRunnable.java");
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let out_dir = std::env::var("OUT_DIR")?;
+
     build_dex();
 
-    let android_source = class_path(std::env::var("ANDROID_JAR").ok());
-    //let androidx_fragment = class_path(Some("fragment-1.6.0-sources.jar".to_string()));
-    let classes = vec![
-        ////Cow::from("android.annotation.AttrRes"),
-        //Cow::from("com.example.NativeRunnable"),
-    ];
-    let classes_to_wrap = vec![
+    let api_level = std::env::var("ANDROID_API_LEVEL")
+        .map(|v| v.parse::<u32>().unwrap_or(DEFAULT_API_LEVEL))
+        .unwrap_or(DEFAULT_API_LEVEL);
 
-        Cow::from("android.R"),
-        Cow::from("android.app.Activity"),
-        Cow::from("android.app.NativeActivity"),
-        Cow::from("android.util.AndroidException"),
-        Cow::from("android.util.AttributeSet"),
-        Cow::from("android.content.IntentSender"),
-        Cow::from("android.view.ContextThemeWrapper"),
-        Cow::from("android.view.SurfaceView"),
+
+    // Generate bindings using jbindgen
+    // Exclude core Java types that are automatically mapped by the jni crate
+    // and problematic packages like java.util.zip, java.util.stream, etc.
+    let patterns = vec![
+        "android.R".to_string(),
+        "android.app.Activity".to_string(),
+        "android.app.NativeActivity".to_string(),
+        "android.util.*".to_string(),
+        "android.content.*".to_string(),
+        "android.view.View".to_string(),
+        "android.view.SurfaceView".to_string(),
+        "android.graphics.*".to_string(),
+        "android.widget.*".to_string(),
+        "android.view.autofill.*".to_string(),
+        "android.os.*".to_string(),
+        //"android.content.pm.*".to_string(),
+    ];
+
+    let patterns = vec![
+
+        "android.R".to_string(),
+        "android.app.Activity".to_string(),
+        "android.app.NativeActivity".to_string(),
+        "android.util.AndroidException".to_string(),
+        "android.util.AttributeSet".to_string(),
+        "android.content.IntentSender".to_string(),
+        "android.view.ContextThemeWrapper".to_string(),
+        "android.view.SurfaceView".to_string(),
         // This results in a duplicate exception field in the enum: Cow::from("android.os.Debug"),
 
         // Works
-        Cow::from("android.view.KeyEvent"),
-        Cow::from("android.view.Window"),
-        Cow::from("android.view.ViewGroup"),
-        Cow::from("android.view.ViewGroup$LayoutParams"),
-        Cow::from("android.view.ViewManager"),
-        Cow::from("android.view.WindowManager"),
-        Cow::from("android.view.WindowManager$LayoutParams"),
-        Cow::from("android.graphics.drawable.Drawable"),
-        Cow::from("android.graphics.drawable.ColorDrawable"),
-        Cow::from("android.graphics.Color"),
-        Cow::from("android.widget.EditText"),
-        Cow::from("android.widget.TextView"),
-        Cow::from("android.widget.RelativeLayout"),
-        Cow::from("android.widget.LinearLayout"),
-        Cow::from("android.widget.FrameLayout"),
-        Cow::from("android.widget.PopupWindow"),
+        "android.view.KeyEvent".to_string(),
+        "android.view.Window".to_string(),
+        "android.view.ViewGroup".to_string(),
+        "android.view.ViewGroup$LayoutParams".to_string(),
+        "android.view.ViewManager".to_string(),
+        "android.view.WindowManager".to_string(),
+        "android.view.WindowManager$LayoutParams".to_string(),
+        "android.graphics.drawable.Drawable".to_string(),
+        "android.graphics.drawable.ColorDrawable".to_string(),
+        "android.graphics.Color".to_string(),
+        "android.widget.EditText".to_string(),
+        "android.widget.TextView".to_string(),
+        "android.widget.RelativeLayout".to_string(),
+        "android.widget.LinearLayout".to_string(),
+        "android.widget.FrameLayout".to_string(),
+        "android.widget.PopupWindow".to_string(),
         /*
         */
         //Cow::from("android.view.LayoutInflater"),
-        Cow::from("android.widget.Button"),
-        Cow::from("android.view.autofill.AutofillId"),
-        Cow::from("android.view.View"),
-        Cow::from("android.view.autofill.AutofillManager"),
+        "android.widget.Button".to_string(),
+        "android.view.autofill.AutofillId".to_string(),
+        "android.view.View".to_string(),
+        "android.view.autofill.AutofillManager".to_string(),
         // AndroidX
         //Cow::from("androidx.fragment.app.FragmentActivity"),
 
         // Java Defaults
-        Cow::from("java.lang.CharSequence"),
-        Cow::from("java.lang.Runnable"),
-        Cow::from("java.lang.Exception"),
-        Cow::from("java.util.ArrayList"),
+        "java.lang.CharSequence".to_string(),
+        "java.lang.Runnable".to_string(),
+        "java.lang.Exception".to_string(),
+        "java.util.ArrayList".to_string(),
         //Cow::from("java.lang.ClassLoader"),
-        Cow::from("dalvik.system.InMemoryDexClassLoader"),
-        //Cow::from("java.io.PrintWriter"),
-        //Cow::from("java.lang.String"),
-        //Cow::from("android.view.Surface"),
+        "dalvik.system.InMemoryDexClassLoader".to_string(),
     ];
-    let output_dir = PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR not set"));
-    let output_file = Cow::from(Path::new("generated_jaffi.rs"));
+    /*
+        */
 
-    let jaffi = Jaffi::builder()
-        .output_dir(&output_dir)
-        .path_modules(true)
-        //.output_filename(&output_file)
-        .native_classes(classes)
-        .classes_to_wrap(classes_to_wrap)
-        .classpath(vec![
-            Cow::from(android_source),
-            Cow::from(output_dir.join("javac-build/classes")),
-        ])
-        .build();
+    // Generate bindings using jbindgen
+    let bindings = Builder::new()
+        .input_android_sdk(api_level, patterns)
+        .skip_signature("Landroid/view/WindowManager$LayoutParams;->type:I")
+        .skip_signature("Landroid/R$transition;->move:I")
+        .skip_signature("Landroid/R$attr;->type:I")
+        .skip_signature("Landroid/os/PatternMatcher;->match(Ljava/lang/String;)I")
+        //.skip_signature("Landroid/content/IntentFilter;->match(Ljava/lang/String;)I")
+        .root_path("crate::bindings")
+        .generate()?;
 
-    jaffi.generate()?;
+    bindings.write_to_files(&out_dir)?;
 
-    // let's format the file to help with debugging build issues
-    let jaffi_file = output_dir.join(output_file);
+    // Also write the type map
+    let type_map_path = PathBuf::from(&out_dir).join("type_map.rs");
+    bindings.write_pub_type_map(&type_map_path, "crate::bindings")?;
 
-    let mut cmd = Command::new("rustfmt");
-    cmd.arg("--emit").arg("files").arg(jaffi_file);
-
-    eprintln!("cargo fmt: {cmd:?}");
-    let output = cmd.output();
-
-    match output {
-        Ok(output) => {
-            std::io::stderr().write_all(&output.stdout).unwrap();
-            std::io::stderr().write_all(&output.stderr).unwrap();
-        }
-        Err(e) => {
-            eprintln!("cargo fmt failed to execute: {e}");
-        }
-    }
+    // In your lib.rs or main.rs, include the generated bindings:
+    // include!(concat!(env!("OUT_DIR"), "/generated_jaffi.rs"));
 
     Ok(())
 }
