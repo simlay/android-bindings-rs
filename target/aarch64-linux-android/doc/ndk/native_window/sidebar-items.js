@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["NativeWindow","NativeWindowBufferLockGuard"],"type":["Rect"]};

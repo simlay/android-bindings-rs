@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Scene","SceneClass","Transition","TransitionClass","TransitionManager","TransitionManagerClass"],"trait":["StaticScene","StaticTransition","StaticTransitionManager"]};

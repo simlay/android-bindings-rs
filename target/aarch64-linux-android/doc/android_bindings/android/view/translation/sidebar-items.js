@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["TranslationCapability","TranslationCapabilityClass","ViewTranslationCallback","ViewTranslationCallbackClass","ViewTranslationResponse","ViewTranslationResponseClass"],"trait":["StaticTranslationCapability","StaticViewTranslationCallback","StaticViewTranslationResponse"]};

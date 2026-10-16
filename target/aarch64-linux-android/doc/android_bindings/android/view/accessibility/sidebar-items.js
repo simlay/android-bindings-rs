@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AccessibilityEvent","AccessibilityEventClass","AccessibilityNodeInfo","AccessibilityNodeInfoClass","AccessibilityNodeProvider","AccessibilityNodeProviderClass"],"trait":["StaticAccessibilityEvent","StaticAccessibilityNodeInfo","StaticAccessibilityNodeProvider"]};
